@@ -1,0 +1,41 @@
+<extentreports>
+  <configuration>
+    <!-- report theme --> <!-- standard, dark -->
+    <theme>standard</theme>
+    <enableTimeline>false</enableTimeline>
+    <!-- document encoding -->  <!-- defaults to UTF-8 -->
+    <encoding>UTF-8</encoding>
+    
+    <!-- protocol for script and stylesheets -->   <!-- defaults to https -->
+    <protocol>https</protocol>
+    
+    <!-- title of the document -->
+    <documentTitle>OnSight Automation</documentTitle>
+    
+    <!-- report name - displayed at top-nav -->
+    <reportName>OnSight Test Execution Report</reportName>
+    
+    <!-- global date format override -->  <!-- defaults to yyyy-MM-dd -->
+    <dateFormat>dd-MM-yyyy</dateFormat>
+    
+    <!-- global time format override -->   <!-- defaults to HH:mm:ss -->
+    <timeFormat>HH:mm:ss</timeFormat>
+    
+    <!-- custom javascript -->
+    <scripts>
+      <![CDATA[
+        $(document).ready(function() {
+        document.querySelector('.logo').setAttribute('src', './lib/360logica.png')
+        });
+      ]]>
+    </scripts>
+    
+    <!-- custom styles -->
+    <styles>
+      <![CDATA[
+        .pre {overflow:auto;}
+        td {border-left:solid 1px #d9d9d9}
+      ]]>
+    </styles>
+  </configuration>
+</extentreports>

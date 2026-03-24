@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locators>
+    <android>
+        <evaluation>
+            <jobPhotoBtn>//android.widget.ImageView[@content-desc="Job Photos"]</jobPhotoBtn>
+            <navigationMenu>//android.widget.ImageView[@content-desc='{{NAVIGATION_MENU}}']</navigationMenu>
+            <evaluationPopUp>//android.view.View[@content-desc="Would you like to complete Install/Dismantle evaluation?"]</evaluationPopUp>
+            <installDismantleBtn>//android.view.View[@content-desc='{{BUTTON_TEXT}}']</installDismantleBtn>
+            <installBtn>//android.view.View[@content-desc="Install"]</installBtn>
+            <questions>//android.view.View[@content-desc='{{TITLE}}']</questions>
+            <answers>//android.view.View[contains(@content-desc,'{{QUESTION}}')] /android.widget.RadioButton[{{INDEX}}]</answers>
+
+<!--            <installQuestion>//android.view.View[@resource-id='{{PACKAGE}}:id/txt_question' and @text='{{TITLE}}']</installQuestion>-->
+            <installOneQues>//android.view.View[@content-desc="Was freight on time? *
+                YES
+                NO"]</installOneQues>
+            <explainField>//android.view.View[@content-desc="Explain *"]/android.widget.EditText</explainField>
+            <mikeAudio>//android.view.View[@content-desc="Explain *"]/android.widget.ImageView</mikeAudio>
+            <additionalCommentField>//android.view.View[@content-desc="Additional Comments"]/android.widget.EditText</additionalCommentField>
+            <popUpText>//android.view.View[@content-desc="Are you sure, you want to submit evaluation for Job number?"]</popUpText>
+            <NoBtn>//android.widget.Button[@content-desc="NO"]</NoBtn>
+
+<genericAnswerButton>//android.view.View[starts-with(@content-desc,"{{question}}")]</genericAnswerButton>
+
+
+
+
+        </evaluation>
+    </android>
+</locators>

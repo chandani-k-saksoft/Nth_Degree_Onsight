@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locators>
+    <android>
+        <jobPhoto>
+            <jobPhotoBtn>//android.widget.ImageView[@content-desc="Job Photos"]</jobPhotoBtn>
+            <navigationMenu>//android.widget.ImageView[@content-desc='{{NAVIGATION_MENU}}']</navigationMenu>
+            <evaluationBtn>//android.widget.ImageView[@content-desc="Evaluation"]</evaluationBtn>
+            <installFreightBtn>//android.view.View[@content-desc="Install Freight"]</installFreightBtn>
+            <chooseCategoryTitle>//android.view.View[@content-desc="Choose Category"]</chooseCategoryTitle>
+            <allCheckBox>//android.widget.CheckBox</allCheckBox>
+            <installFreightCheckbox>//android.view.View[@content-desc="{{NAME}}"]/android.widget.CheckBox</installFreightCheckbox>
+            <jobPhotoAddBtn>//android.view.View[@content-desc="{{NAME}}"]/android.widget.ImageView</jobPhotoAddBtn>
+            <installFreightbox>//android.view.View[@content-desc="Install Freight"]/android.widget.CheckBox</installFreightbox>
+            <installFreightAddBtn>//android.view.View[@content-desc="Install Freight"]/android.widget.ImageView</installFreightAddBtn>
+            <sendEmailInstallBox>(//android.view.View[@content-desc="Send email"])[1]/android.widget.CheckBox</sendEmailInstallBox>
+            <sendEmailInstallFreightContentBox>(//android.view.View[@content-desc="Send email"])[2]/android.widget.CheckBox</sendEmailInstallFreightContentBox>
+            <screenTitle>//android.view.View[@content-desc='{{NAVIGATION_MENU}}']</screenTitle>
+            <version>//android.view.View[contains(@content-desc,'-stage')]</version>
+            <hamBurgerIcon>(//android.widget.ImageView)[1]</hamBurgerIcon>
+            <submitBtn>//android.widget.Button[@content-desc="SUBMIT"]</submitBtn>
+            <addPhototextTitle>//android.view.View[@content-desc="Add Photo"]</addPhototextTitle>
+            <galleryBtn>(//android.widget.ImageView)[2]</galleryBtn>
+            <cameraClickBtn>(//android.widget.Button)[4]</cameraClickBtn>
+            <cameraPhotoViewBtn>(//android.view.View/android.widget.Button)[3]</cameraPhotoViewBtn>
+            <cmeraScreenBackArrow>(//android.view.View/android.widget.Button)[1]</cmeraScreenBackArrow>
+            <cameraBtn>(//android.widget.ImageView)[1]</cameraBtn>
+            <cameraFlashBtn>(//android.view.View[1]/android.widget.Button)[2]</cameraFlashBtn>
+            <cameraPhotoSendBtn>(//android.widget.Button)[5]</cameraPhotoSendBtn>
+            <addPhotoOutSide>//android.view.View[@content-desc="Scrim"]</addPhotoOutSide>
+            <galleryPhotoBtn>//android.widget.TextView[@text="Photos"]</galleryPhotoBtn>
+            <galleryCollectionsBtn>//android.widget.TextView[@text="Collections"]</galleryCollectionsBtn>
+            <galleryDoneBtn>//android.widget.TextView[@text="Done"]</galleryDoneBtn>
+            <commonGalleryPhotoSelect>//android.view.View[contains(@content-desc,'Photo taken')]</commonGalleryPhotoSelect>
+            <countButton>(//android.view.View[@content-desc="{{ITEM}}"]/android.view.View)[1]</countButton>
+            <galleryAddTextBtn>//android.view.View[@content-desc="ADD"]</galleryAddTextBtn>
+            <removeBtn>//android.widget.Button[@content-desc="REMOVE"]</removeBtn>
+            <photoUploadPlusBtn>(//android.view.View//android.widget.ImageView)[1]</photoUploadPlusBtn>
+            <addPhotoBtn>//android.widget.Button[@content-desc="ADD PHOTOS"]</addPhotoBtn>
+            <imageViewThumbnile>//android.view.View[@content-desc="Promo"]/android.view.View[1]</imageViewThumbnile>
+            <miceBtn>//android.view.View[@content-desc="Add Notes"]/android.widget.ImageView</miceBtn>
+            <addNotesField>//android.widget.EditText</addNotesField>
+            <promoCheckBox>//android.widget.CheckBox</promoCheckBox>
+            <successPhotoOkBtn>//android.widget.Button[@content-desc="OK"]</successPhotoOkBtn>
+
+
+
+        </jobPhoto>
+    </android>
+</locators>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locators>
+    <android>
+        <dashboard>
+            <dashboardText>//android.view.View[@content-desc="Dashboard"]</dashboardText>
+            <navigationMenu>//android.widget.ImageView[@content-desc='{{NAVIGATION_MENU}}']</navigationMenu>
+            <screenTitle>//android.view.View[@content-desc='{{NAVIGATION_MENU}}']</screenTitle>
+            <version>//android.view.View[contains(@content-desc,'-stage')]</version>
+            <hamBurgerIcon>(//android.widget.ImageView)[1]</hamBurgerIcon>
+            <jobUpdate>//android.widget.ImageView[@content-desc="Job Updates"]</jobUpdate>
+            <jobUpdateImage>(//android.widget.ImageView)[2]</jobUpdateImage>
+            <jobUpdateField>//android.widget.EditText</jobUpdateField>
+            <downloadBoxCheckBox>//android.widget.CheckBox</downloadBoxCheckBox>
+            <invalidJobNumberText>//android.view.View[@content-desc="Job number is invalid"]</invalidJobNumberText>
+            <submitBtn>//android.widget.Button[@content-desc="SUBMIT"]</submitBtn>
+            <jobPhotoBtn>//android.widget.ImageView[@content-desc="Job Photos"]</jobPhotoBtn>
+            <evaluationBtn>//android.widget.ImageView[@content-desc="Evaluation"]</evaluationBtn>
+            <jobUpdateOptions>//android.widget.Button[@content-desc="{{BUTTON_TEXT}}"]</jobUpdateOptions>
+            <addEmailBtn>//android.view.View[@content-desc="Enter Email"]/android.widget.ImageView</addEmailBtn>
+            <additionalEmailText>//android.view.View[@content-desc="Additional Email Address"]</additionalEmailText>
+            <expandEmailAddBtn>//android.widget.Button[@content-desc="Additional Contacts"]</expandEmailAddBtn>
+            <emailField>//android.view.View[@content-desc="Enter Email"]</emailField>
+            <enterEmailTextField>//android.widget.EditText</enterEmailTextField>
+            <addEmailIcon>//android.view.View[@content-desc="Enter Email"]/android.widget.ImageView</addEmailIcon>
+            <elipsisBtn>//android.widget.ImageView[@content-desc="Show menu"]</elipsisBtn>
+            <logout>//android.widget.Button[@content-desc="Logout"]</logout>
+            <showInfo>//android.widget.Button[@content-desc="Show Info"]</showInfo>
+            <showNameText>//android.view.View[@content-desc="Show Name"]</showNameText>
+            <infoTitle>//android.view.View[@content-desc='{{INFO_DETAILS}}']</infoTitle>
+
+        </dashboard>
+    </android>
+</locators>

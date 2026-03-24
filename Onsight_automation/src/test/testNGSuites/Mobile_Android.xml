@@ -1,0 +1,26 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="1" data-provider-thread-count="1" parallel="tests" verbose="1" name="Android Test Execution"
+       annotations="JDK">
+    <parameter name="environment" value="stage"/>
+    <parameter name="platform" value="Android"/>
+    <parameter name="device" value="2ed6f6c7"/>
+    <parameter name="version" value="13"/>
+    <parameter name="automator" value="UiAutomator2"/>
+    <parameter name="appium_url" value="http://127.0.0.1:4724"/>
+    <parameter name="grantPermission" value="true"/>
+
+    <test name="STAGE Android Mobile" junit="false" preserve-order="true">
+        <classes>
+            <class name="bddRunner.RunnerTest">
+            </class>
+        </classes>
+    </test>
+
+<!--    <test name="ReRun Failed STAGE Android Mobile" junit="false" preserve-order="true">-->
+<!--        <parameter name="reRun" value="true"/>-->
+<!--        <classes>-->
+<!--            <class name="bddRunner.RunnerTest">-->
+<!--            </class>-->
+<!--        </classes>-->
+<!--    </test>-->
+</suite>

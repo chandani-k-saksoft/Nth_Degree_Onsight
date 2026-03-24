@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locators>
+    <android>
+    <login>
+        <appLogo>(//android.widget.ImageView)[1]</appLogo>
+        <bannerImage>(//android.widget.ImageView)[2]</bannerImage>
+        <skipBtn>//android.view.View[@content-desc="Skip"]</skipBtn>
+        <forwardBtn>//android.view.View/android.widget.ImageView[2]</forwardBtn>
+        <emailAndCodeField>//android.widget.EditText</emailAndCodeField>
+        <sendCodeBtn>//android.widget.Button[@content-desc="SEND CODE"]</sendCodeBtn>
+        <editBtn>//android.widget.Button[@content-desc="Edit"]</editBtn>
+        <okBtn>//android.widget.Button[@content-desc="OK"]</okBtn>
+        <resendCode>//android.view.View[@content-desc="Resend Code"]</resendCode>
+        <verifyBtn>//android.widget.Button[@content-desc="VERIFY"]</verifyBtn>
+        <genericBtn>//android.widget.Button[@content-desc="{BUTTON_TEXT}"]</genericBtn>
+        <genericMsg>//android.view.View[@content-desc="{{MESSAGE_TEXT}}"]</genericMsg>
+        <dashboardText>//android.view.View[@content-desc="Dashboard"]</dashboardText>
+        <toast>//android.widget.Toast[1]</toast>
+    </login>
+    </android>
+</locators>

@@ -1,0 +1,139 @@
+
+
+name: _mobile_automation_$(Date:yyyyMMdd)-$(BuildID)
+
+trigger:
+  - develop
+
+parameters:
+  - name: ENV
+    type: string
+    default: STAGE
+    values:
+      - STAGE
+      - DEV
+      - UAT
+      - PROD
+
+variables:
+  ENV: ${{ parameters.ENV }}
+  
+stages:
+  - stage: Android
+    displayName: "Android $(ENV) Test"
+    jobs:
+      - job: AndroidJob
+        displayName: "Run Android Tests on $(ENV)"
+        pool:
+          vmImage: 'macos-latest'
+        
+        steps:
+          - checkout: self
+            displayName: "Checkout repository"
+            continueOnError: true
+
+          - bash: |
+              ENV_UPPER=$(echo "$(ENV)" | tr '[:lower:]' '[:upper:]')
+              echo "Environment in uppercase: $ENV_UPPER"
+
+              CURRENT_DIR=$(pwd)
+              LOG_FILE="Appium_Logs_${ENV_UPPER}_Android.txt"
+
+              if [ -f "$LOG_FILE" ]; then
+                echo "Removing existing log file: $LOG_FILE"
+                rm "$LOG_FILE"
+              fi
+
+              echo "Running tests with profile: ${ENV_UPPER}_android"
+              mvn clean test -P${ENV_UPPER}_android
+
+              echo "Execution complete. Log saved to: $LOG_FILE"
+            displayName: "Execute Appium Android Tests and Generate Log"
+            continueOnError: true
+
+          - bash: |
+              if [ ! -d "Reports" ]; then
+                echo "Reports folder not found, skipping..."
+                exit 0
+              fi
+
+              echo "Searching for the latest HTML report under Reports/ ..."
+              LATEST_HTML=$(find Reports -type f -name "*.html" -printf "%T@ %p\n" | sort -nr | head -n 1 | awk '{print $2}')
+
+              if [ -z "$LATEST_HTML" ]; then
+                echo "No HTML reports found!"
+                exit 0
+              fi
+
+              echo "Latest HTML report found: $LATEST_HTML"
+              echo "##vso[task.setvariable variable=LATEST_HTML_PATH]$LATEST_HTML"
+            displayName: "Find Latest Android HTML Report"
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(LATEST_HTML_PATH)'
+              artifactName: 'Android_HTML_Report'
+              publishLocation: 'Container'
+            displayName: "Publish Android HTML Report Artifact"
+            condition: always()
+
+  - stage: iOS
+    displayName: "iOS $(ENV) Test"
+    dependsOn: []   # <-- Run in parallel with Android
+    jobs:
+      - job: iOSJob
+        displayName: "Run iOS Tests on $(ENV)"
+        pool:
+          vmImage: 'macos-latest'
+
+        steps:
+          - checkout: self
+            displayName: "Checkout repository"
+            continueOnError: true
+
+          - bash: |
+              ENV_UPPER=$(echo "$(ENV)" | tr '[:lower:]' '[:upper:]')
+              echo "Environment in uppercase: $ENV_UPPER"
+
+              CURRENT_DIR=$(pwd)
+              LOG_FILE="Appium_Logs_${ENV_UPPER}_ios.txt"
+
+              if [ -f "$LOG_FILE" ]; then
+                echo "Removing existing log file: $LOG_FILE"
+                rm "$LOG_FILE"
+              fi
+
+              echo "Running tests with profile: ${ENV_UPPER}_ios"
+              mvn clean test -P${ENV_UPPER}_ios
+
+              echo "Execution complete. Log saved to: $LOG_FILE"
+            displayName: "Execute Appium iOS Tests and Generate Log"
+            continueOnError: true
+
+          - bash: |
+              if [ ! -d "Reports" ]; then
+                echo "Reports folder not found, skipping..."
+                exit 0
+              fi
+
+              echo "Searching for the latest HTML report under Reports/ ..."
+              LATEST_HTML=$(find Reports -type f -name "*.html" -printf "%T@ %p\n" | sort -nr | head -n 1 | awk '{print $2}')
+
+              if [ -z "$LATEST_HTML" ]; then
+                echo "No HTML reports found!"
+                exit 0
+              fi
+
+              echo "Latest HTML report found: $LATEST_HTML"
+              echo "##vso[task.setvariable variable=LATEST_HTML_PATH]$LATEST_HTML"
+            displayName: "Find Latest iOS HTML Report"
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(LATEST_HTML_PATH)'
+              artifactName: 'iOS_HTML_Report'
+              publishLocation: 'Container'
+            displayName: "Publish iOS HTML Report Artifact"
+            condition: always()

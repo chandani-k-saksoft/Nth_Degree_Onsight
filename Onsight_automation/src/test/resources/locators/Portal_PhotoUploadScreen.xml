@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locators>
+    <portal>
+        <showNumberText>//label[text()='Show Number:']</showNumberText>
+        <showNumberField>//input[@class='k-input-inner']</showNumberField>
+        <selectReportText>//label[text()='Select Report:']</selectReportText>
+        <selectReportField>//span[@class='k-input-value-text']</selectReportField>
+        <selectReportFilterbtn>//button[@aria-label='Select']</selectReportFilterbtn>
+        <submitBtn>//button[@type='submit']</submitBtn>
+        <showNameText>//label[text()='Show Name : ']</showNameText>
+        <showNameDetails>//span[text()='Saksoft Test Show 2026']</showNameDetails>
+        <showDateText>//label[text()='Show Dates : ']</showDateText>
+        <workOrder>//tr[td[normalize-space()='W-256523']]/td[@aria-colindex='1']</workOrder>
+        <exhibitorName>//tr[td[normalize-space()='W-256523']]/td[@aria-colindex='2']</exhibitorName>
+        <installFreightPhotoCount>//tr[td[normalize-space()='W-256523']]/td[@aria-colindex='3']//a[text()='49']</installFreightPhotoCount>
+        <installFreightPhotoCount2>//tr[td[normalize-space()='W-256523']]/td[@aria-colindex='3']//a</installFreightPhotoCount2>
+        <installFreightContentPhotoCount>//tr[td[normalize-space()='W-256523']]/td[@aria-colindex='4']//a</installFreightContentPhotoCount>
+        <installProgressPhotoCount>//tr[td[normalize-space()='W-256523']]/td[@aria-colindex='5']//a</installProgressPhotoCount>
+        <jobNumberTitle>//span[@title='Job Number']</jobNumberTitle>
+        <exhibitorNameTitle>//span[@title='Exhibitor Name']</exhibitorNameTitle>
+        <intstallFreightTitle>//span[@title='Install Freight']</intstallFreightTitle>
+        <refreshGridBtn>//button[text()='Refresh Grid']</refreshGridBtn>
+        <exportToExcelBtn>//button[text()='Export to Excel']</exportToExcelBtn>
+        <jobPhototableCol>//tr[td[normalize-space()='{{jobNumber}}']]/td[@aria-colindex='{{index}}']/a</jobPhototableCol>
+        <imageClick>//td/img[@src]</imageClick>
+        <imageNextClick>//button[@role='navigation']</imageNextClick>
+
+
+
+
+
+    </portal>
+</locators>

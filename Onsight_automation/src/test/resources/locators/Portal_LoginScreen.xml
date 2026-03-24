@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locators>
+    <portal>
+        <portalWelcomeText>//h2[text()='Nth Degree On-Sight Team Portal']</portalWelcomeText>
+        <emailField>//input[@name='login_user_fake']</emailField>
+        <passwordField>//input[@name='login_pass_fake']</passwordField>
+        <loginButton>//button[text()='Log In']</loginButton>
+        <dashboardButton>//a[text()='Dashboard']</dashboardButton>
+        <showNumberText>//label[text()='Show Number:']</showNumberText>
+        <selectReportText>//label[text()='Select Report:']</selectReportText>
+        <manageUserButton>//a[text()='Manage users']</manageUserButton>
+        <addButton>//button[contains(normalize-space(.), 'Add')]</addButton>
+        <securityLevelsBtn>//button[contains(normalize-space(.), 'Security Levels')]</securityLevelsBtn>
+        <importBtn>//button[contains(normalize-space(.), 'Import')]</importBtn>
+        <exportBtn>//button[contains(normalize-space(),'Export to Excel')]</exportBtn>
+        <fullName>//input[@name='uniqueName']</fullName>
+        <firstName>//input[@name='firstName']</firstName>
+        <lastName>//input[@name='lastName']</lastName>
+        <countryCodeDropdown>(//button[contains(@class,'k-input-button')])[1]
+        </countryCodeDropdown>
+        <mobileNo>//input[@name='mobileNumber']</mobileNo>
+        <email>//input[@name='emailAddress']</email>
+        <securityLevelDropdown>(//button[contains(@class,'k-input-button')])[2]</securityLevelDropdown>
+        <cancelBtn>//button[text()='Cancel']</cancelBtn>
+        <addBtn>//button[@type='submit']</addBtn>
+        <firstNameFilter>//a[@title='First Name Filter Menu']</firstNameFilter>
+        <emailAddressFilterBtn>//a[@title='Email Address Filter Menu']</emailAddressFilterBtn>
+        <emailAddressFilterfield>(//input[@aria-label='Email Address Filter'])[1]</emailAddressFilterfield>
+        <clearBtn>//button[@type='reset']</clearBtn>
+        <filterBtn>//button[@type='submit']</filterBtn>
+        <editBtn>//button[text()='EDIT']</editBtn>
+        <onToggleBtn>//tr[@role='row']/td[9]//input[@type='checkbox']</onToggleBtn>
+        <selectReportFilterbtn>//button[@aria-label='Select']</selectReportFilterbtn>
+
+    </portal>
+</locators>

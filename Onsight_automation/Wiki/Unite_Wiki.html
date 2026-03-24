@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unite Wiki Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+      <header>
+        <div class="container">
+            <h1 style="color:rgb(201, 28, 5);background-color:DodgerBlue;text-align: center;">Unite Wiki Page</h1>
+        </div>
+    </header>
+    <h1 style="color:DodgerBlue;">1. baseDriver Class</h1>
+    <p>The <code>baseDriver</code> class provides methods for initializing various drivers used for automated testing, including WebDriver, AppiumDriver, WindowsDriver, and RequestSpecification for API testing.</p>
+
+    <h2>Package</h2>
+    <pre><code>package core;</code></pre>
+
+    <h2>Imports</h2>
+    <p>The class uses the following imports:</p>
+    <ul>
+        <li>Selenium WebDriver and related packages</li>
+        <li>RestAssured for API testing</li>
+        <li>Appium Java Client for mobile automation</li>
+        <li>WebDriverManager for managing WebDriver binaries</li>
+        <li>Logging libraries</li>
+        <li>Apache HTTP Client</li>
+        <li>Zap Proxy API</li>
+    </ul>
+
+    <h2>Class Declaration</h2>
+    <pre><code>@Log4j2
+public class baseDriver implements apiDriver, webDriver, desktopDriver, mobileDriver {</code></pre>
+
+    <h2>Fields</h2>
+    <ul>
+        <li><code>ThreadLocal&lt;ClientApi&gt; ZapScanner</code> - Thread-local variable for ZAP Scanner instance.</li>
+        <li><code>static Process p</code> - Static variable to store a process.</li>
+    </ul>
+
+    <h2>Methods</h2>
+
+    <h3>webinit</h3>
+    <p>Initializes WebDriver for web automation.</p>
+    <pre><code>public WebDriver webinit(String browser, String BaseURL, Boolean Grid, Boolean proxyRequired) throws Exception { ... }</code></pre>
+    <p>Overloaded method for headless mode:</p>
+    <pre><code>public WebDriver webinit(String browser, String BaseURL, Boolean Grid, Boolean proxyRequired, Boolean headless) throws Exception { ... }</code></pre>
+
+    <h3>desktopinit</h3>
+    <p>Initializes WindowsDriver for desktop automation.</p>
+    <pre><code>public WindowsDriver desktopinit(String Application) throws Exception { ... }</code></pre>
+
+    <h3>mobileinit</h3>
+    <p>Initializes AppiumDriver for mobile automation.</p>
+    <pre><code>public AppiumDriver mobileinit(String Device, String appPackage, String AppActivity, String Platform, String Application) throws Exception { ... }</code></pre>
+
+    <h3>apiinit</h3>
+    <p>Initializes RequestSpecification for API testing using RestAssured.</p>
+    <pre><code>public RequestSpecification apiinit(String baseurl) { ... }</code></pre>
+
+    <h3>ReturnZapScanner</h3>
+    <p>Returns the ThreadLocal ZAP Scanner instance.</p>
+    <pre><code>public ClientApi ReturnZapScanner() { ... }</code></pre>
+
+    <h3>ReturncurrentProcess</h3>
+    <p>Returns the static process instance.</p>
+    <pre><code>public Process ReturncurrentProcess() { ... }</code></pre>
+
+    <h2>Notes</h2>
+    <ul>
+        <li>Ensure that the log4j2 configuration file is properly set up in the working directory.</li>
+        <li>Different browsers and modes are handled with specific configurations, such as proxy settings and headless mode.</li>
+    </ul>
+</body>
+<body>
+    <hr width="100%" size="2">
+    <hr width="100%" size="2" color="blue" noshade>
+    <hr width="100%;" color="red" size="5">
+</body>
+<body>
+    <h1 style="color:DodgerBlue;">2. baseDriverHelper Class</h1>
+    <p><strong>Package:</strong> core</p>
+    <p><strong>Import Statements:</strong></p>
+    <pre>
+import static io.restassured.matcher.RestAssuredMatchers.matchesXsd;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.FileReader;
+import java.io.StringReader;
+import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.function.Function;
+import javax.imageio.ImageIO;
+import javax.xml.parsers.ParserConfigurationException;
+import com.deque.html.axecore.args.AxeRunOnlyOptions;
+import com.deque.html.axecore.args.AxeRunOptions;
+import com.deque.html.axecore.results.Results;
+import com.deque.html.axecore.results.Rule;
+import com.deque.html.axecore.selenium.AxeBuilder;
+import com.google.gson.JsonElement;
+import com.paulhammant.ngwebdriver.*;
+import io.appium.java_client.AppiumBy;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.nativekey.AndroidKey;
+import io.appium.java_client.android.nativekey.KeyEvent;
+import io.appium.java_client.windows.WindowsDriver;
+import io.restassured.http.ContentType;
+import lombok.Data;
+import lombok.extern.log4j.Log4j2;
+import org.dom4j.Node;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.locators.RelativeLocator;
+import org.openqa.selenium.support.ui.*;
+import org.testng.Assert;
+import org.xml.sax.SAXException;
+import io.restassured.authentication.FormAuthConfig;
+import io.restassured.http.Headers;
+import io.restassured.http.Method;
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
+import simplexml.SimpleXml;
+import simplexml.model.Element;
+    </pre>
+
+    <h2>Class Overview</h2>
+    <p>This class is a helper for managing various drivers and configurations, including WebDriver, RequestSpecification, WindowsDriver, AppiumDriver, and more. It provides methods for interacting with web elements, handling API requests, and waiting for various conditions in the automated tests.</p>
+
+    <h2>Fields</h2>
+    <ul>
+        <li><code>WebDriver driver</code> - WebDriver instance for web automation</li>
+        <li><code>RequestSpecification Request</code> - RequestSpecification for API testing</li>
+        <li><code>WindowsDriver DesktopDriver</code> - WindowsDriver instance for desktop automation</li>
+        <li><code>AppiumDriver MobileDriver</code> - AppiumDriver instance for mobile automation</li>
+        <li><code>AndroidDriver AndroidDriver</code> - AndroidDriver instance for Android automation</li>
+        <li><code>NgWebDriver ngDriver</code> - NgWebDriver instance for AngularJS applications</li>
+        <li><code>Wait<WebDriver> wait</code> - FluentWait for web automation</li>
+        <li><code>Wait<WindowsDriver> waitDesktop</code> - FluentWait for desktop automation</li>
+        <li><code>Wait<AppiumDriver> waitMobile</code> - FluentWait for mobile automation</li>
+        <li><code>WebElement el</code> - WebElement for UI interaction</li>
+        <li><code>List<WebElement> ellist</code> - List of WebElements for UI interaction</li>
+        <li><code>Response Resultrespoence</code> - Response instance for storing API response</li>
+        <li><code>String Payload</code> - String for storing payloads</li>
+        <li><code>String ReportPayload</code> - String for storing report payloads</li>
+        <li><code>String Contenttype</code> - Default content type</li>
+        <li><code>Document XMLDocumentPayload</code> - XML document payload</li>
+        <li><code>JSONObject JSONDocumentPayload</code> - JSON document payload</li>
+        <li><code>String WindDirectionDegree</code> - Variable for specific data</li>
+        <li><code>Properties propinhelper</code> - Properties for helper</li>
+        <li><code>String VideoName</code> - Variable for storing video name</li>
+        <li><code>String Root</code> - Root directory path for resources</li>
+    </ul>
+
+    <h2>Constructors</h2>
+    <ul>
+        <li><code>baseDriverHelper(WebDriver dr)</code> - Initializes the WebDriver instance and sets up the FluentWait for web automation.</li>
+        <li><code>baseDriverHelper(WindowsDriver dr)</code> - Initializes the WindowsDriver instance and sets up the FluentWait for desktop automation.</li>
+        <li><code>baseDriverHelper(AppiumDriver dr)</code> - Initializes the AppiumDriver instance and sets up the FluentWait for mobile automation.</li>
+        <li><code>baseDriverHelper(RequestSpecification dr, Response respoence)</code> - Initializes RequestSpecification and Response instances.</li>
+    </ul>
+
+    <h2>Methods</h2>
+    <ul>
+        <li><code>void waitforElementtobeclickable(String locator)</code> - Waits until the element specified by the locator is clickable.</li>
+        <li><code>void waitforElementNotToBeVisible(WebElement wl)</code> - Waits until the specified WebElement is not visible.</li>
+        <li><code>void verifyElementToBePresent(String Locators)</code> - Verifies that the element specified by Locators is present.</li>
+        <li><code>void verifyElementNotToBePresent(String Locators)</code> - Verifies that the element specified by Locators is not present.</li>
+        <li><code>void waitForCompletePageLoad()</code> - Waits until the page is fully loaded.</li>
+        <li><code>void waitforTitleContains(String Title)</code> - Waits until the page title contains the specified title.</li>
+        <li><code>void waitForLoad(WebDriver driver)</code> - Waits until the page load condition is met.</li>
+        <li><code>void waitforFrameToBeAvailableAndSwitchToIt(String frameName)</code> - Waits until the specified frame is available and switches to it.</li>
+        <li><code>void waitFortTextToBePresentInElement(WebElement wl, String Textanme)</code> - Waits until the specified text is present in the specified WebElement.</li>
+        <li><code>void waitUntilTheElementIsVisible(WebElement wl)</code> - Waits until the specified WebElement is visible.</li>
+        <li><code>void waitUntilTheElementIsNotSelected(WebElement wl)</code> - Waits until the specified WebElement is not selected.</li>
+        <li><code>void waitUntilTheAttributeValueChangeToAnElement(WebElement wl, String AttributeName, String AttributeValue)</code> - Waits until the specified attribute of the WebElement changes to the specified value.</li>
+        <li><code>void waitUntilAlertNotDisplaying()</code> - Waits until no alert is displaying.</li>
+        <li><code>boolean verifyAlertPresent()</code> - Verifies if an alert is present.</li>
+        <li><code>String returnAlertMessage()</code> - Returns the alert message text.</li>
+        <li><code>boolean isAlertPresent()</code> - Checks if an alert is present.</li>
+        <li><code>void SwitchToParentWindod()</code> - Switches back to the parent window.</li>
+        <li><code>void SwitchToParentPage()</code> - Switches to the default content (main page) from an iframe or frame.</li>
+        <li><code>void CloseCurrentWindows()</code> - Closes the currently focused window.</li>
+        <li><code>void CloseAllWindows()</code> - Closes all windows except the parent window.</li>
+        <li><code>void GOto(String url)</code> - Navigates to the specified URL.</li>
+        <li><code>void Refresh()</code> - Refreshes the current page.</li>
+        <li><code>void Forward()</code> - Navigates forward in the browser history.</li>
+        <li><code>void Back()</code> - Navigates backward in the browser history.</li>
+        <li><code>void SwitchToFrame(String frameName)</code> - Switches to a frame by its name.</li>
+        <li><code>void SwitchToParentFrame()</code> - Switches to the parent frame and then to the default content.</li>
+        <li><code>void SwitchToFrameByIndex(String index)</code> - Switches to a frame by its index.</li>
+        <li><code>void SwitchToFrameByElement(WebElement wl)</code> - Switches to a frame using a WebElement.</li>
+        <li><code>void DeleteCookiesWithName(String cookiesName)</code> - Deletes a cookie by its name.</li>
+        <li><code>void DeleteAllCookies()</code> - Deletes all cookies.</li>
+        <li><code>void AcceptAlert()</code> - Accepts the current alert.</li>
+        <li><code>void CancelAlert()</code> - Dismisses the current alert.</li>
+        <li><code>void ScrollIntoView(WebElement el)</code> - Scrolls the specified WebElement into view.</li>
+        <li><code>void Clickon(WebElement el)</code> - Clicks on the specified WebElement with error handling.</li>
+        <li><code>void SafeJavaScriptClick(WebElement element)</code> - Performs a JavaScript click on the specified WebElement.</li>
+        <li><code>void ClickonIfElementVisible(WebElement el)</code> - Clicks on the WebElement if it is visible.</li>
+        <li><code>void ClearAttributeValue(WebElement element)</code> - Clears the value of the specified WebElement using JavaScript.</li>
+        <li><code>void ClearText(WebElement element)</code> - Clears the text of the specified WebElement.</li>
+        <li><code>boolean verifyLinksOpenNewTanOrWindows(WebElement element)</code> - Verifies if a link opens in a new tab or window.</li>
+        <li><code>void setAttributeUsingJS(WebElement element, String attName, String attValue)</code> - Sets an attribute using JavaScript.</li>
+        <li><code>boolean VerifyElementValueLessThan(WebElement element, int ExpValue)</code> - Verifies if the element value is less than the expected value.</li>
+        <li><code>boolean VerifyElementValueGreaterThan(WebElement element, int ExpValue)</code> - Verifies if the element value is greater than the expected value.</li>
+        <li><code>boolean VerifyElementValueLessThanOrEqualTo(WebElement element, int ExpValue)</code> - Verifies if the element value is less than or equal to the expected value.</li>
+        <li><code>boolean VerifyElementValueGreaterThanOrEqualTo(WebElement element, int ExpValue)</code> - Verifies if the element value is greater than or equal to the expected value.</li>
+        <li><code>void SendKeys(WebElement el, String value)</code> - Sends keys to an element.</li>
+        <li><code>void Clear(WebElement el)</code> - Clears an element.</li>
+        <li><code>void SendKeysUsingJS(WebElement el, String value)</code> - Sends keys using JavaScript.</li>
+        <li><code>void ClickOnElementToOpenInNewWindowAndSwitchToIt(WebElement element)</code> - Clicks on an element to open it in a new window and switches to it.</li>
+        <li><code>void SendkeaboardKeys(WebElement el, Keys k)</code> - Sends keyboard keys to an element.</li>
+        <li><code>void SendKeyBoardKeysUsingActions(Keys keys)</code> - Sends keyboard keys using the Actions class.</li>
+        <li><code>void PressShiftDelete()</code> - Presses Shift + Delete keys using the Actions class.</li>
+          <li><code>boolean checkOptions(String[] expected, WebElement el)</code> - Checks if the options in a dropdown (or similar element) match the expected values.</li>
+    <li><code>void SendKeyswithAction(WebElement el, String key) throws Exception</code> - Sends keys to an element using the Actions class, including pressing ENTER.</li>
+    <li><code>void ClickswithAction(String el) throws InterruptedException</code> - Clicks an element using the Actions class, located by XPath.</li>
+    <li><code>void WaitforFiletobeDownloaded(String Filename) throws InterruptedException</code> - Waits for a file to be downloaded by checking if it exists in the specified directory.</li>
+    <li><code>WebElement getwebelement(String locator) throws InterruptedException</code> - Retrieves a web element using various locators (name, id, XPath, etc.) and waits for it to be clickable or visible.</li>
+    <li><code>WebElement getwebelement(Node locator, String filelocation) throws InterruptedException, IOException</code> - Retrieves a web element with an image attribute and takes a screenshot of it, saving it to a specified location.</li>
+    <li><code>WebElement getDesktopelement(String locator) throws InterruptedException</code> - Retrieves a desktop application element using locators like name, id, and XPath.</li>
+    <li><code>void javascriptButtonClick(WebElement webElement)</code> - Clicks a web element using JavaScript.</li>
+    <li><code>String getAdsOnPage(String string)</code> - Retrieves the source URL and dimensions of ads within nested iframes.</li>
+    <li><code>boolean validateDataTrackResearchPage()</code> - Validates that elements with the 'data-track' attribute do not have leading or trailing spaces.</li>
+    <li><code>WebElement getMobileelement(String locator) throws InterruptedException</code> - Retrieves a mobile element using locators such as class, id, automationID, and XPath.</li>
+    <li><code>WebElement ReturnElement(String locator)</code> - Returns a web element based on locators like name, id, and XPath.</li>
+    <li><code>String Getattribute(WebElement el, String attributename)</code> - Gets the value of an attribute from a web element.</li>
+    <li><code>void Moveon(WebElement el)</code> - Moves the mouse to a web element using the Actions class.</li>
+    <li><code>boolean isElementPresent(String locator)</code> - Checks if an element is present and displayed using XPath.</li>
+    <li><code>void Expandthesection(WebElement Section, WebElement ClickableElement) throws Exception</code> - Expands a section if it is not already expanded, using JavaScript to scroll into view and click.</li>
+    <li><code>void SendKeys(AndroidKey key) throws InterruptedException, IOException</code> - Sends Android keys (e.g., for mobile testing).</li>
+    <li><code>void waitForpageload() throws Exception</code> - Waits for a page to load by checking for specific loading indicators.</li>
+    <li><code>void waitForpageloadmask() throws InterruptedException</code> - Waits for a loading mask to disappear.</li>
+    <li><code>void EnterText(String s)</code> - Sends text to the desktop application using Actions.</li>
+    <li><code>String capturescreenshotforelement(WebElement ele) throws IOException</code> - Captures a screenshot of a specific web element and returns it as a base64 encoded string.</li>
+    <li><code>String Capturefullscreenshot(WebDriver driver) throws IOException</code> - Captures a full-page screenshot and returns it as a base64 encoded string.</li>
+    <li><code>void SwitchToLastTab()</code> - Switches to the last opened tab in the browser.</li>
+    <li><code>void GetIframeLoaded(String framlocator)</code> - Waits for an iframe to be present in the DOM and switches to it.</li>
+    <li><code>void WaitforPageToBeReady() throws Exception</code> - Waits until the page's ready state is "complete."</li>
+    <li><code>String GetTitle()</code> - Gets the title of the current page.</li>
+    <li><code>void OpenURL(String environment)</code> - Opens the specified URL.</li>
+  <li><code>void OpenURLV2(String environment) throws Exception</code> - Opens the URL specified by the environment variable and waits for 5 seconds.</li>
+            <li><code>void GetURL(String URL)</code> - Opens the specified URL.</li>
+            <li><code>void VerifyTitle(String Expectedtitle)</code> - Verifies if the current page's title contains the expected title.</li>
+            <li><code>void verifyCurrentURL(String ExpectedURL)</code> - Verifies if the current URL contains the expected URL.</li>
+            <li><code>void VerifyText(WebElement el, String Expectedtext)</code> - Verifies if the element's text contains the expected text.</li>
+            <li><code>void PageRefresh() throws Exception</code> - Refreshes the current page and waits for 5 seconds.</li>
+            <li><code>String CurrentURL()</code> - Gets the current URL of the page.</li>
+            <li><code>String CaptureScreenShotForElement(WebElement ele)</code> - Captures a screenshot for an element (not implemented).</li>
+            <li><code>String CaptureFullScreenShot(WebDriver driver)</code> - Captures a full screenshot (not implemented).</li>
+  </ul>
+ <h2>API Helper Methods</h2>
+        <ul>
+            <li><code>void authentication(String type, String username, String password)</code> - Handles different types of authentication including Basic, Preemptive, Form, ComplexForm, and OAuth2.</li>
+            <li><code>void updateRequestHeader(String HeaderKey, String value)</code> - Updates the request header with a specified key and value.</li>
+            <li><code>String readRequestTemplate(String path) throws IOException</code> - Reads and returns the content of the request template file as a string.</li>
+            <li><code>void updateAttributeInRequestBody(String Filename, String Key, String value) throws Exception</code> - Updates a specific attribute in the request body based on the file type (JSON or XML).</li>
+            <li><code>void updateAttributeInRequestBody(String Filename, HashMap<String, String> values) throws Exception</code> - Updates multiple attributes in the request body based on the file type (XML).</li>
+            <li><code>void generatePayLoad()</code> - Sets the payload body for the request and prints it.</li>
+            <li><code>void generatemultipart(String key, String Value)</code> - Adds a multipart form-data part to the request.</li>
+            <li><code>void submitRequest(Method method, String URI)</code> - Submits the request and prints the response body.</li>
+            <li><code>void assertStringInResponceBody(String ExpectedData)</code> - Asserts that the response body contains the expected data.</li>
+            <li><code>void assertStatusCode(int ExpectedStatusCode)</code> - Asserts that the response status code matches the expected status code.</li>
+            <li><code>void assertStatusLine(String ExpectedStatusLine)</code> - Asserts that the response status line matches the expected status line.</li>
+            <li><code>void assertHeaderattribute(String HeaderName, String ExpectedheaderValue)</code> - Asserts that the response header matches the expected value.</li>
+            <li><code>void assertResponceBodyAttribute(String Node, String Expectedvalue) throws SAXException, IOException, ParserConfigurationException, DocumentException</code> - Asserts that the response body attribute matches the expected value (JSON or XML).</li>
+            <li><code>String SaveAttributevalue(String Node) throws DocumentException</code> - Saves and returns the value of a specific attribute from the response (JSON or XML).</li>
+            <li><code>JSONObject Inputgenerator(JSONObject templatefile, String Node, String Value)</code> - Generates input by updating a specific node in the template JSON file.</li>
+            <li><code>void validateResponseJsonSchema(String path)</code> - Constructs the path to the JSON schema file and validates the response against it.</li>
+            <li><code>String appendUriWithParameters(String uri, Map<String, String> headerMap)</code> - Appends parameters to the given URI based on the provided map.</li>
+            <li><code>void addRequestParameters(Map<String, String> headerMap)</code> - Adds parameters from the map to the request.</li>
+            <li><code>void setContentType(String contentType)</code> - Sets the content type for the request.</li>
+            <li><code>void setContentTypeRestAssured(ContentType contentType)</code> - Sets the content type using RestAssured.</li>
+    <li>
+        <code>void validateResponseXMLSchema(String path)</code> 
+        <div class="method-description">
+            Constructs the path to the XML schema file and validates the response against it.
+        </div>
+    </li>
+    <li>
+        <code>String getBaseURI(String uri)</code> 
+        <div class="method-description">
+            Retrieves the base URI from configuration properties based on the environment.
+        </div>
+    </li>
+    <li>
+        <code>void validateResponseXMLSchemaWithoutSoapEnvelope(String path) throws IOException</code> 
+        <div class="method-description">
+            Validates the XML response against a schema, excluding the SOAP envelope.
+        </div>
+    </li>
+    <li>
+        <code>private static Element getBook(final Element element)</code> 
+        <div class="method-description">
+            Extracts the 'book' element from the given XML element.
+        </div>
+    </li>
+    <li>
+        <code>void readPayload(String requestpath)</code> 
+        <div class="method-description">
+            Reads the payload from a file and assigns it to the Payload variable.
+        </div>
+    </li>
+    <li>
+        <code>String getSingleValueFromResponse(String Node)</code> 
+        <div class="method-description">
+            Retrieves the value of a specific node from the response, handling both JSON and XML responses.
+        </div>
+    </li>
+    <li>
+        <code>void Stringcomparator(String actual, String expected)</code> 
+        <div class="method-description">
+            Compares two strings and asserts they are equal.
+        </div>
+    </li>
+    <li>
+        <code>void Jsoncomparator(JsonElement actual, JsonElement expected)</code> 
+        <div class="method-description">
+            Compares two JSON elements and asserts they are equal.
+        </div>
+    </li>
+    <li>
+        <code>void Booleancomparator(Boolean actual, Boolean expected)</code> 
+        <div class="method-description">
+            Compares two Boolean values and asserts they are the same.
+        </div>
+    </li>
+    <li>
+        <code>void UpdatedAttributeinxmlPayload(String Node, String Value) throws DocumentException, IOException, SAXException, ParserConfigurationException</code> 
+        <div class="method-description">
+            Updates the text value of a specified XML node in the payload.
+        </div>
+    </li>
+    <li>
+        <code>void UpdatedAttributeinJsonPayload(String Node, String Value, boolean isstring) throws DocumentException, IOException, SAXException, ParserConfigurationException</code> 
+        <div class="method-description">
+            Updates a JSON node with a specified value in the JSON payload.
+        </div>
+    </li>
+    <li>
+        <code>void submitRequestWithHeader(Method method, String URI)</code> 
+        <div class="method-description">
+            Submits a request with a specified HTTP method and URI, and sets the header for the request.
+        </div>
+    </li>
+    <li>
+        <code>void assertNodeIsPresent(String Node, boolean expected) throws SAXException, IOException, ParserConfigurationException, DocumentException</code> 
+        <div class="method-description">
+            Asserts whether a specified XML or JSON node is present in the response.
+        </div>
+    </li>
+    <li>
+        <code>String Base64Encoder(String data) throws SAXException, IOException, ParserConfigurationException, DocumentException</code> 
+        <div class="method-description">
+            Encodes a given string to its Base64 representation.
+        </div>
+    </li>
+    <li>
+        <code>String ReturnPaylod() throws SAXException, IOException, ParserConfigurationException, DocumentException</code> 
+        <div class="method-description">
+            Returns the current payload as a string.
+        </div>
+    </li>
+    <li>
+        <code>boolean isValidDateFormat(String dateStr, String dateFormat)</code> 
+        <div class="method-description">
+            Checks if a given date string matches a specified date format.
+        </div>
+    </li>
+<li>
+        <code>void Partialstringcomparator(String actual, String expected)</code>
+        <div class="method-description">
+            Compares two strings to check if the actual string contains the expected string.
+        </div>
+        <div class="example">
+            <pre>
+<b>Example:</b>
+Partialstringcomparator("Hello World", "World"); // Passes if "Hello World" contains "World"
+Partialstringcomparator("Hello World", "Universe"); // Fails if "Hello World" does not contain "Universe"
+            </pre>
+        </div>
+    </li>
+    
+    <li>
+        <code>String RetrurnResponce()</code>
+        <div class="method-description">
+            Returns the response as a string.
+        </div>
+        <div class="example">
+            <pre>
+<b>Example:</b>
+String response = RetrurnResponce(); // Returns the response as a string
+            </pre>
+        </div>
+    </li>
+    
+    <li>
+        <code>String getTodaysDateinFormat(String dateFormat)</code>
+        <div class="method-description">
+            Gets today's date formatted according to the specified format.
+        </div>
+        <div class="example">
+            <pre>
+<b>Example:</b>
+String formattedDate = getTodaysDateinFormat("MM-dd-yyyy"); // Returns current date in "MM-dd-yyyy" format
+            </pre>
+        </div>
+    </li>
+    
+    <li>
+        <code>String createOrderNumber()</code>
+        <div class="method-description">
+            Creates a unique order number based on the current timestamp.
+        </div>
+        <div class="example">
+            <pre>
+<b>Example:</b>
+String orderNumber = createOrderNumber(); // Returns a unique order number based on the current timestamp
+            </pre>
+        </div>
+    </li>
+    
+    <li>
+        <code>String pollCurrentTime(String className, String timeStamp, String timeOut) throws InterruptedException</code>
+        <div class="method-description">
+            Polls the current time and performs an action if it matches a given timestamp.
+        </div>
+        <div class="example">
+            <pre>
+<b>Example:</b>
+String currentTime = pollCurrentTime("time-class", "12:30", "00:02"); // Polls until the time matches "12:30" or the timeout is reached
+            </pre>
+        </div>
+    </li>
+    
+    <li>
+        <code>boolean compare(String webTimeStamp, String androidTimeStamp)</code>
+        <div class="method-description">
+            Compares web time with a given timestamp and returns true if within an acceptable range.
+        </div>
+        <div class="example">
+            <pre>
+<b>Example:</b>
+boolean isMatch = compare("12:30", "12:28"); // Returns true if the time difference is within the acceptable range
+            </pre>
+        </div>
+    </li>
+    
+    <li>
+        <code>void HandleAngularwait()</code>
+        <div class="method-description">
+            Waits for Angular requests to finish.
+        </div>
+        <div class="example">
+            <pre>
+<b>Example:</b>
+HandleAngularwait(); // Waits for all Angular requests to complete
+            </pre>
+        </div>
+    </li>
+    
+    <li>
+        <code>void HandleAngularmain()</code>
+        <div class="method-description">
+            Asserts the number of elements found by the Angular repeater.
+        </div>
+        <div class="example">
+            <pre>
+<b>Example:</b>
+HandleAngularmain(); // Asserts that exactly one element is found
+            </pre>
+        </div>
+    </li>
+    
+    <li>
+        <code>WebElement getNGWebelement(String locator) throws InterruptedException</code>
+        <div class="method-description">
+            Retrieves Angular web elements based on various locators.
+        </div>
+        <div class="example">
+            <pre>
+<b>Example:</b>
+WebElement element = getNGWebelement("binding=exampleBinding"); // Retrieves an Angular element based on the given locator
+            </pre>
+        </div>
+    </li>
+    
+    <li>
+        <code>void waitForElementLoad(int x)</code>
+        <div class="method-description">
+            Waits for a specified amount of time.
+        </div>
+        <div class="example">
+            <pre>
+<b>Example:</b>
+waitForElementLoad(5); // Waits for 5 seconds
+            </pre>
+        </div>
+    </li>
+    
+    <li>
+        <code>WebElement getWebElementWithRelative(String locator, WebElement wl, String relative) throws InterruptedException</code>
+        <div class="method-description">
+            Gets a web element with relative positioning based on a locator.
+        </div>
+        <div class="example">
+            <pre>
+<b>Example:</b>
+WebElement element = getWebElementWithRelative("id=exampleId", someElement, "above"); // Retrieves an element located above the specified element
+            </pre>
+        </div>
+    </li>
+    
+    <li>
+        <code>void checkAccessibility()</code>
+        <div class="method-description">
+            Checks accessibility using Axe for automated accessibility testing.
+        </div>
+        <div class="example">
+            <pre>
+<b>Example:</b>
+checkAccessibility(); // Runs accessibility checks and prints violation details
+            </pre>
+        </div>
+    </li>
+
+</ul> 
+</body>
+<body>
+    <hr width="100%" size="2">
+    <hr width="100%" size="2" color="blue" noshade>
+    <hr width="100%;" color="red" size="5">
+</body>
+<body>
+    <h1style="color:DodgerBlue;">3. bddDriver Class Documentation</h1>
+    <p>The <code>bddDriver</code> class is a comprehensive test driver for handling various types of tests including web, API, mobile, and desktop. It uses different drivers and tools to manage these tests and provides functionalities for test setup, execution, and teardown.</p>
+
+    <h2>Class Overview</h2>
+    <p>The <code>bddDriver</code> class includes methods for initializing and managing different types of drivers, handling test reports, and logging test results. It also supports accessibility compliance checks and performance testing.</p>
+
+    <h2>Fields</h2>
+    <ul>
+        <li><code>int TotalTest</code> - Counter for total tests.</li>
+        <li><code>int TotalFailed</code> - Counter for failed tests.</li>
+        <li><code>ThreadLocal<WebDriver> WEB_DRIVER_THREAD_LOCAL</code> - Stores the WebDriver instance for thread safety.</li>
+        <li><code>ThreadLocal<RequestSpecification> API_DRIVER_THREAD_LOCAL</code> - Stores the API driver instance for thread safety.</li>
+        <li><code>ThreadLocal<Response> API_RESPONCE_THREAD_LOCAL</code> - Stores the API response instance for thread safety.</li>
+        <!-- Add other fields here -->
+    </ul>
+
+    <h2>Methods</h2>
+    <h3>Setup Methods</h3>
+    <ul>
+        <li><code>@Before</code> - Sets up the scenario before each test run.</li>
+        <li><code>@Before("@API")</code> - Initializes API-related configurations.</li>
+        <li><code>@Before("@WEB")</code> - Initializes web-related configurations.</li>
+        <li><code>@Before("@DESKTOP")</code> - Initializes desktop-related configurations.</li>
+        <li><code>@Before("@MOBILE")</code> - Initializes mobile-related configurations.</li>
+    </ul>
+
+    <h3>Teardown Methods</h3>
+    <ul>
+        <li><code>@After("@WEB")</code> - Cleans up after web tests, including screenshots and ZAP security scans.</li>
+        <li><code>@After("@API")</code> - Cleans up after API tests and updates the test results.</li>
+        <li><code>@After("@DESKTOP")</code> - Cleans up after desktop tests and reports status.</li>
+        <li><code>@After("@MOBILE")</code> - Cleans up after mobile tests and reports status.</li>
+    </ul>
+
+    <h3>Utility Methods</h3>
+    <ul>
+        <li><code>getErrors(Scenario scenario)</code> - Retrieves error messages from a failed scenario.</li>
+        <li><code>getTestDetails(Scenario s)</code> - Returns formatted details of the test scenario.</li>
+        <li><code>validateXMLSchema(String xsdPath, String xmlPath)</code> - Validates an XML file against an XSD schema.</li>
+        <li><code>Run_AccessibilityTest()</code> - Runs accessibility tests on the current page.</li>
+        <li><code>performance()</code> - Runs JMeter performance scripts.</li>
+        <li><code>performanceReportLogger()</code> - Logs a link to the detailed performance report.</li>
+        <li><code>Addlog(String message)</code> - Adds a log entry with a screenshot.</li>
+        <!-- Add other methods here -->
+    </ul>
+
+    <h2>Usage Example</h2>
+    <pre><code>
+@Before("@WEB")
+public void Websetup(Scenario s) throws Exception {
+    String browser = Reporter.getCurrentTestResult().getTestContext().getCurrentXmlTest().getParameter("Browser");
+    webDriver webDriver = new baseDriver();
+    boolean SecuryScan = Boolean.valueOf(pr.readproperty("SecurityScan" + browser));
+    String app = pr.readproperty("application_url");
+    WEB_DRIVER_THREAD_LOCAL.set(webDriver.webinit(browser, app, false, SecuryScan));
+    try {
+        ZAP_CANNER_THREAD_LOCAL.set(webDriver.ReturnZapScanner());
+        ZAP_CANNER_THREAD_LOCAL.get().spider.scan(app, null, null, null, null);
+    } catch (Exception e) {
+        System.out.println("No ZapCanner is not setup");
+    }
+    Accessibility.REPORT_PATH = System.getProperty("user.dir") + "/Reports/Accessibility/Report";
+    setcompliences();
+    accessibilityRunner = new AccessibilityRunner(WEB_DRIVER_THREAD_LOCAL.get());
+    date1 = new Date();
+}
+    </code></pre>
+
+    <h2>Notes</h2>
+    <p>Ensure that the necessary drivers and tools are properly set up and configured in your environment for the <code>bddDriver</code> class to function correctly.</p>
+</body>
+<body>
+    <hr width="100%" size="2">
+    <hr width="100%" size="2" color="blue" noshade>
+    <hr width="100%;" color="red" size="5">
+</body>
+
+<body>
+    <!-- <header>
+        <div class="container"> -->
+            <h1 style="color:DodgerBlue;">4. Step Definitions Documentation</h1>
+        <!-- </div>
+    </header> -->
+    <div class="container">
+        <article>
+            <h2>Wait Until Text is Present on a Page</h2>
+            <pre>
+@Then("^Wait until the text \"([^\"]*)\" is present on the \"([^\"]*)\" page$")
+public void Wait_Until_Text_Is_present_on_page(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.waitforElementtobeclickable(locators.getlocator("//locators/" + Locators));
+    webDriver.verifyElementToBePresent(locators.getlocator("//locators/" + Locators));
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until a specified text is present on a page by checking the visibility and presence of the element associated with the text.</p>
+            <p><strong>Parameters:</strong> <code>Locators</code> (text to check), <code>PageName</code> (name of the page with the XML locators).</p>
+        </article>
+
+        <article>
+            <h2>Wait Until Text is Absent on a Page</h2>
+            <pre>
+@Then("^Wait until the text \"([^\"]*)\" is Absent on the \"([^\"]*)\" page$")
+public void Wait_Until_Text_Is_Absent_on_page(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.waitforElementNotToBeVisible(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    webDriver.verifyElementNotToBePresent(locators.getlocator("//locators/" + Locators));
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until a specified text is absent from a page by checking the non-visibility and absence of the element associated with the text.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until Page Title Changes</h2>
+            <pre>
+@Then("^Wait until the current page title changes to \"([^\"]*)\"$")
+public void Wait_Until_Title_Is_Change(String Title) throws Throwable {
+    webDriver.waitforTitleContains(Title);
+    System.out.println(webDriver.GetTitle());
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits for the page title to change to a specified value and prints the current page title.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until Page is Fully Loaded</h2>
+            <pre>
+@Then("^Wait until the current page is loaded completely$")
+public void Wait_Until_Page_Loaded_Completely() throws Throwable {
+    webDriver.waitForCompletePageLoad();
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until the current page is fully loaded.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until Frame is Loaded and Switch to It</h2>
+            <pre>
+@Then("^Wait until the frame \"([^\"]*)\" is loaded and switch to the frame$")
+public void WaitforFrameToBeAvailableAndSwitchToIt(String FrameName) throws Throwable {
+    webDriver.waitforFrameToBeAvailableAndSwitchToIt(FrameName);
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until a specified frame is loaded and then switches to it.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until Text Value Changes</h2>
+            <pre>
+@Then("^Wait until the \"([^\"]*)\" value changes to \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void WaitforFrameToBeAvailableAndSwitchToIt(String Locators, String Text, String PageName) throws Throwable {
+    try {
+        locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+        webDriver.waitFortTextToBePresentInElement(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), Text);
+    } catch (Exception e) {
+        Thread.sleep(2000); // Retry after a short delay
+        locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+        webDriver.waitFortTextToBePresentInElement(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), Text);
+    }
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits for a text value to change to a specified value on a page. Includes a retry mechanism in case of failure.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until Element is Visible</h2>
+            <pre>
+@Then("^Wait until the \"([^\"]*)\" is visible on the \"([^\"]*)\" page$")
+public void WaitUntilTheElementIsVisible(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.waitUntilTheElementIsVisible(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until a specified element is visible on the page.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until Element is Not Selected</h2>
+            <pre>
+@Then("^Wait until the \"([^\"]*)\" is not selected on the \"([^\"]*)\" page$")
+public void WaitUntilTheElementIsNotSelected(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.waitUntilTheElementIsNotSelected(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until a specified element is not selected.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until Element is Clickable</h2>
+            <pre>
+@Then("^Wait until the \"([^\"]*)\" is clickable on the \"([^\"]*)\" page$")
+public void WaitUntilTheElementIsClickable(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.waitforElementtobeclickable(locators.getlocator("//locators/" + Locators));
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until a specified element is clickable.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until Attribute Value Changes</h2>
+            <pre>
+@Then("^Wait until the attribute \"([^\"]*)\" with value \"([^\"]*)\" of the \"([^\"]*)\" is changed on the \"([^\"]*)\" page$")
+public void waitUntilTheAttributeValueChangeToAnElement(String AttributeName, String AttributeValue, String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.waitUntilTheAttributeValueChangeToAnElement(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), AttributeName, AttributeValue);
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until the value of a specific attribute of an element changes.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until Alert is Absent</h2>
+            <pre>
+@Then("^Wait until the Alert currently displayed is absent$")
+public void WaitUntilTheAlertNotDisplaying() throws Throwable {
+    webDriver.waitUntilAlertNotDisplaying();
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until the currently displayed alert is absent.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until Element is Not Visible</h2>
+            <pre>
+@Then("^Wait until the \"([^\"]*)\" is Not visible on the \"([^\"]*)\" page$")
+public void WaitUntilTheElementIsNotVisible(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.waitforElementNotToBeVisible(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until a specified element is not visible on the page.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until Alert is Displayed</h2>
+            <pre>
+@Then("^Wait until an Alert is displayed in the current page$")
+public void WaitUntilTheAlertIsDisplaying() throws Throwable {
+    webDriver.waitUntilTheAlertIsDisplaying();
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until an alert is displayed on the current page.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until All Images are Loaded</h2>
+            <pre>
+@Then("^Wait until all images are loaded in the current page$")
+public void WaitUntilAllImagesAreLoaded() throws Throwable {
+    webDriver.waitUntilAllImagesAreLoaded();
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until all images are loaded on the current page.</p>
+        </article>
+
+        <article>
+            <h2>Wait Until a New Window is Opened</h2>
+            <pre>
+@Then("Wait until a new window is opened")
+public void WaitUntilANewWindowOpen(int time) throws Throwable {
+    webDriver.waitUntilANewWindowOpen();
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits until a new window is opened.</p>
+        </article>
+
+        <article>
+            <h2>Wait for a Specified Number of Seconds</h2>
+            <pre>
+@Then("Wait for {int} seconds")
+public void WaitUntilAllImagesAreLoaded(int time) throws Throwable {
+    webDriver.waitForElementLoad(time);
+}
+            </pre>
+            <p><strong>Purpose:</strong> Waits for a specified number of seconds.</p>
+        </article>
+
+        <article>
+            <h2>Uncheck the Checkbox</h2>
+            <pre>
+@Then("^Uncheck the checkbox \"([^\"]*)\" on \"([^\"]*)\" Page$")
+public void UncheckTheCheckbox(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.uncheckTheCheckBox(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+}
+            </pre>
+            <p><strong>Purpose:</strong> Unchecks the checkbox specified by the locator on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Check the Checkbox</h2>
+            <pre>
+@Then("^Check the checkbox \"([^\"]*)\" on \"([^\"]*)\" Page$")
+public void checkTheCheckbox(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.CheckTheCheckBox(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+}
+            </pre>
+            <p><strong>Purpose:</strong> Checks the checkbox specified by the locator on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Page Title</h2>
+            <pre>
+@Then("^Verify that the current page title is \"([^\"]*)\"$")
+public void VerifyTitle(String Title) throws Throwable {
+    System.out.println(webDriver.GetTitle());
+    webDriver.VerifyTitle(Title);
+}
+            </pre>
+            <p><strong>Purpose:</strong> Verifies that the current page title matches the expected title.</p>
+        </article>
+
+        <article>
+            <h2>Verify Page URL</h2>
+            <pre>
+@Then("^Verify that the current page URL is \"([^\"]*)\"$")
+public void VerifyCurrentURL(String CurrentURL) throws Throwable {
+    System.out.println(webDriver.CurrentURL());
+    webDriver.verifyCurrentURL(CurrentURL);
+}
+            </pre>
+            <p><strong>Purpose:</strong> Verifies that the current page URL matches the expected URL.</p>
+        </article>
+
+        <article>
+            <h2>Verify Text Presence on Page</h2>
+            <pre>
+@Then("^Verify text \"([^\"]*)\" is present on the \"([^\"]*)\" page$")
+public void Verify_Text_Is_present_on_page(String Locators, String PageName) throws Throwable {
+    // Initialize the XML reader with the locator file for the specified page
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+
+    // Wait for the element to be clickable and then verify its presence
+    webDriver.waitforElementtobeclickable(locators.getlocator("//locators/" + Locators));
+    webDriver.verifyElementToBePresent(locators.getlocator("//locators/" + Locators));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the specified text is present on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Element Presence on Page</h2>
+            <pre>
+@Then("^Verify Element \"([^\"]*)\" is present on the \"([^\"]*)\" page$")
+public void Verify_Element_Is_present_on_page(String Locators, String PageName) throws Throwable {
+    // Initialize the XML reader with the locator file for the specified page
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+
+    // Wait for the element to be clickable and then verify its presence
+    webDriver.waitforElementtobeclickable(locators.getlocator("//locators/" + Locators));
+    webDriver.verifyElementToBePresent(locators.getlocator("//locators/" + Locators));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the specified element is present on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Alert Presence</h2>
+            <pre>
+@Then("^Verify that an Alert is present$")
+public void VerifyThatAnAlertIsPresent() throws Throwable {
+    // Wait until the alert is displayed
+    webDriver.waitUntilTheAlertIsDisplaying();
+
+    // Assert that the alert is present
+    Assert.assertTrue(webDriver.verifyAlertPresent(), "Alert not present on Page");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that an alert is present on the current page.</p>
+        </article>
+
+        <article>
+            <h2>Verify List Options</h2>
+            <pre>
+@Then("^Verify that the list \"([^\"]*)\" has some option selected on the \"([^\"]*)\" page$")
+public void VerifyThatListHasSomeOptionSelected(String Locators, String PageName) throws Throwable {
+    // Initialize the XML reader with the locator file for the specified page
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+
+    // Check if the list has some option selected and assert the result
+    boolean flag = webDriver.returnListHasSomeOptionSelected(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    Assert.assertTrue(flag, "Options are not selected on Select Input Box");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the specified list has some option selected on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify List Option Count</h2>
+            <pre>
+@Then("^Verify that the list \"([^\"]*)\" has \"([^\"]*)\" number of options on the \"([^\"]*)\" page$")
+public void VerifyThatListHasNumberOfOptions(String Locators, String NumberofOptions, String PageName) throws Throwable {
+    // Initialize the XML reader with the locator file for the specified page
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+
+    // Get the number of options in the list and assert it matches the expected count
+    int noOfOption = webDriver.returnListHasNumberOfOptions(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    Assert.assertEquals(noOfOption, Integer.parseInt(NumberofOptions), "Mismatch Options Count on Page");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the specified list has the expected number of options on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify List Option Selection</h2>
+            <pre>
+@Then("^Verify that the list \"([^\"]*)\" has option with value \"([^\"]*)\" selected on the \"([^\"]*)\" page$")
+public void VerifyThatListHasOptionWithValueSelected(String Locators, String SelectedValue, String PageName) throws Throwable {
+    // Initialize the XML reader with the locator file for the specified page
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+
+    // Check if the list has the specified option selected and assert the result
+    boolean flag = webDriver.returnListHasOptionWithValueSelected(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), SelectedValue);
+    Assert.assertTrue(flag, "Provided Value are not selected");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the specified list has an option with the given value selected on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Multi-Option Selection in List</h2>
+            <pre>
+@Then("^Verify that the list \"([^\"]*)\" allows selection of multiple options on the \"([^\"]*)\" page$")
+public void VerifyThatListAllowSelectionOfMultipleOption(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources/locators/" + PageName + ".xml");
+    boolean flag = webDriver.returnAllowSelectionOfMultipleOptionFlag(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    Assert.assertTrue(flag, "Multiple Selection Option is not enabled.");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the specified list allows selection of multiple options on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Non-Empty Element Value</h2>
+            <pre>
+@Then("^Verify that the \"([^\"]*)\" has non-empty value on the \"([^\"]*)\" page$")
+public void VerifyThatElementHasNonEmptyValue(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources/locators/" + PageName + ".xml");
+    boolean flag = webDriver.returnElementEmptyValueFlag(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    Assert.assertTrue(flag, "Element has Empty value where expected was Non-Empty Value");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the specified element has a non-empty value on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Non-Empty Element Text</h2>
+            <pre>
+@Then("^Verify that the \"([^\"]*)\" has non-empty Text on the \"([^\"]*)\" page$")
+public void VerifyThatElementHasNonEmptyText(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources/locators/" + PageName + ".xml");
+    boolean flag = webDriver.returnElementEmptyTextFlag(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    Assert.assertTrue(flag, "Element has Empty value where expected was Non-Empty Value");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the specified element has non-empty text on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Empty Element Value</h2>
+            <pre>
+@Then("^Verify that the \"([^\"]*)\" has empty value on the \"([^\"]*)\" page$")
+public void VerifyThatElementHasEmptyValue(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources/locators/" + PageName + ".xml");
+    boolean flag = webDriver.returnElementEmptyValueFlag(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    Assert.assertFalse(flag, "Element has non Empty value where expected was Empty Value");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the specified element has an empty value on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Empty Element Text</h2>
+            <pre>
+@Then("^Verify that the \"([^\"]*)\" has empty Text on the \"([^\"]*)\" page$")
+public void VerifyThatElementHasEmptyText(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources/locators/" + PageName + ".xml");
+    boolean flag = webDriver.returnElementEmptyTextFlag(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    Assert.assertFalse(flag, "Element has non Empty value where expected was Empty Value");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the specified element has empty text on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Element Attribute Value</h2>
+            <pre>
+@Then("^Verify that the \"([^\"]*)\" has attribute \"([^\"]*)\" with value \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void VerifyThatElementHasAttributeValue(String Locators, String AttributeName, String ExpectedValue, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources/locators/" + PageName + ".xml");
+    String ActualValue = webDriver.getwebelement(locators.getlocator("//locators/" + Locators)).getAttribute(AttributeName);
+    Assert.assertEquals(ActualValue, ExpectedValue, "Mismatch in Attribute Value");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the specified element has the given attribute with the expected value on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Element CSS Property</h2>
+            <pre>
+@Then("^Verify that the \"([^\"]*)\" has CSS property \"([^\"]*)\" with value \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void VerifyThatElementHasCSSPropertyValue(String Locators, String CSSPropertyName, String ExpectedValue, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources/locators/" + PageName + ".xml");
+    String ActualValue = webDriver.getwebelement(locators.getlocator("//locators/" + Locators)).getCssValue(CSSPropertyName);
+    Assert.assertEquals(ActualValue, ExpectedValue, "Mismatch in CSS Property Value");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the specified element has the given CSS property with the expected value on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Today's Date as Value</h2>
+            <pre>
+@Then("^Verify that the value of \"([^\"]*)\" is today's date on the \"([^\"]*)\" page$")
+public void VerifyThatValueIsTodaysDate(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources/locators/" + PageName + ".xml");
+    String dateValue = webDriver.getwebelement(locators.getlocator("//locators/" + Locators)).getAttribute("value");
+    String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date());
+    Assert.assertEquals(dateValue, todayDate, "Mismatch in Date Value");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the value of the specified element is today's date on the given page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Today's Date as Text</h2>
+            <pre>
+@Then("^Verify that the text of \"([^\"]*)\" is today's date on the \"([^\"]*)\" page$")
+public void VerifyThatTextIsTodaysDate(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources/locators/" + PageName + ".xml");
+    String textValue = webDriver.getwebelement(locators.getlocator("//locators/" + Locators)).getText();
+    String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date());
+    Assert.assertEquals(textValue, todayDate, "Mismatch in Date Text");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the text of the specified element is today's date on the given page.</p>
+        </article>
+        <article>
+            <h2>Verify Alert Message</h2>
+            <pre>
+@Then("^Verify that the Alert displays the message as \"([^\"]*)\"$")
+public void VerifyAlertMessage(String AlertMessage) throws Throwable {
+    Assert.assertEquals(webDriver.returnAlertMessage(), AlertMessage.trim(), "Value not matched!!");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that the alert message matches the expected message.</p>
+        </article>
+
+        <article>
+            <h2>Store Title of Current Page</h2>
+            <pre>
+@Then("^Set the title of current page in a variable \"([^\"]*)\"$")
+public void storeTitleOfPage(String Title) throws Throwable {
+    HashMap<String, String> Variables = new HashMap<>();
+    Variables.put(Title, webDriver.GetTitle());
+    Variables.putAll(DriverInstance.getVariables());
+    DriverInstance.setVariables(Variables);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Stores the title of the current page in a variable.</p>
+        </article>
+
+        <article>
+            <h2>Retrieve Title from Variable</h2>
+            <pre>
+@Then("^Get the title of current page from a variable \"([^\"]*)\"$")
+public void getTitleOfPage(String Title) throws Throwable {
+    DriverInstance.getVariables().get(Title);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Retrieves the title of the current page from a variable.</p>
+        </article>
+
+        <article>
+            <h2>Store Application URL</h2>
+            <pre>
+@Then("^Set the Application URL into \"([^\"]*)\"$")
+public void StoreURLOfApplication(String URL) throws Throwable {
+    HashMap<String, String> Variables = new HashMap<>();
+    Variables.put(URL, webDriver.CurrentURL());
+    DriverInstance.setVariables(Variables);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Stores the application URL in a variable.</p>
+        </article>
+
+        <article>
+            <h2>Retrieve Application URL from Variable</h2>
+            <pre>
+@Then("^Get the URL of Application from a variable \"([^\"]*)\"$")
+public void getURLOfApplication(String URL) throws Throwable {
+    DriverInstance.getVariables().get(URL);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Retrieves the application URL from a variable.</p>
+        </article>
+
+        <article>
+            <h2>Store Attribute Value from Element</h2>
+            <pre>
+@Then("^Set the value of attribute \"([^\"]*)\" from \"([^\"]*)\" on the \"([^\"]*)\" page in a variable \"([^\"]*)\"$")
+public void storeAttributeOfElement(String AttributeName, String Locators, String PageName, String VariableName) throws Throwable {
+    HashMap<String, String> Variables = new HashMap<>();
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    String data = webDriver.returnElementAttrubuteValue(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), AttributeName);
+    Variables.put(VariableName, data);
+    Variables.putAll(DriverInstance.getVariables());
+    DriverInstance.setVariables(Variables);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Stores the value of a specific attribute from an element on a page in a variable.</p>
+        </article>
+
+        <article>
+            <h2>Retrieve Attribute Value from Variable</h2>
+            <pre>
+@Then("^Get the value of attribute \"([^\"]*)\" from a variable \"([^\"]*)\"$")
+public void getValueOfAttribute(String AttributeName, String VariableName) throws Throwable {
+    System.out.println(AttributeName);
+    DriverInstance.getVariables().get(VariableName);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Retrieves the value of a specific attribute from a variable.</p>
+        </article>
+
+        <article>
+            <h2>Store Displayed Value from Element</h2>
+            <pre>
+@Then("^Set the value displayed in \"([^\"]*)\" on the \"([^\"]*)\" page in a variable \"([^\"]*)\"$")
+public void storeValueOfElement(String Locators, String PageName, String VariableName) throws Throwable {
+    HashMap<String, String> Variables = new HashMap<>();
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    String data = webDriver.returnElementAttrubuteValue(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), "value");
+    Variables.put(VariableName, data);
+    Variables.putAll(DriverInstance.getVariables());
+    DriverInstance.setVariables(Variables);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Stores the value displayed in a specified element on a page in a variable.</p>
+        </article>
+
+        <article>
+            <h2>Retrieve Element Value from Variable</h2>
+            <pre>
+@Then("^Get the value of Element from a variable \"([^\"]*)\"$")
+public void getValueOfElement(String VariableName) throws Throwable {
+    DriverInstance.getVariables().get(VariableName);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Retrieves the value of an element from a variable.</p>
+        </article>
+
+        <article>
+            <h2>Store URL of Current Page</h2>
+            <pre>
+@Then("^Set URL of the current page in a variable \"([^\"]*)\"$")
+public void storeURLOfPage(String variable) throws Throwable {
+    HashMap<String, String> Variables = new HashMap<>();
+    Variables.put(variable, webDriver.CurrentURL());
+    Variables.putAll(DriverInstance.getVariables());
+    DriverInstance.setVariables(Variables);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Stores the URL of the current page in a variable.</p>
+        </article>
+
+        <article>
+            <h2>Retrieve Current URL from Variable</h2>
+            <pre>
+@Then("^Get the URL of current page from a variable \"([^\"]*)\"$")
+public void getCurrentURLOfPage(String variable) throws Throwable {
+    DriverInstance.getVariables().get(variable);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Retrieves the URL of the current page from a variable.</p>
+        </article>
+
+        <article>
+            <h2>Store Selected Option Text from List</h2>
+            <pre>
+@Then("^Set text of the selected option from list \"([^\"]*)\" on the \"([^\"]*)\" page in a variable \"([^\"]*)\"$")
+public void storeSelectedOptionFromList(String Locators, String PageName, String VariableName) throws Throwable {
+    HashMap<String, String> Variables = new HashMap<>();
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    String data = webDriver.returnValueSelectedInList(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    Variables.put(VariableName, data);
+    Variables.putAll(DriverInstance.getVariables());
+    DriverInstance.setVariables(Variables);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Stores the text of the selected option from a list on a page in a variable.</p>
+        </article>
+
+        <article>
+            <h2>Retrieve Selected Option Text from Variable</h2>
+            <pre>
+@Then("^Get text of the selected option from list from a variable \"([^\"]*)\"$")
+public void getSelectedOptionFromList(String variable) throws Throwable {
+    DriverInstance.getVariables().get(variable);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Retrieves the text of the selected option from a list from a variable.</p>
+        </article>
+
+        <article>
+            <h2>Store Count of Options in List</h2>
+            <pre>
+@Then("^Set count of options in the List \"([^\"]*)\" on the \"([^\"]*)\" page in a variable \"([^\"]*)\"$")
+public void storeOptionCountFromList(String Locators, String PageName, String VariableName) throws Throwable {
+    HashMap<String, String> Variables = new HashMap<>();
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    String data = String.valueOf(webDriver.returnOptionsCountsInList(webDriver.getwebelement(locators.getlocator("//locators/" + Locators))));
+    Variables.put(VariableName, data);
+    Variables.putAll(DriverInstance.getVariables());
+    DriverInstance.setVariables(Variables);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Stores the count of options in a list on a page in a variable.</p>
+        </article>
+
+        <article>
+            <h2>Retrieve Option Count from Variable</h2>
+            <pre>
+@Then("^Get count of options in the List from a variable \"([^\"]*)\"$")
+public void getOptionCountFromList(String variable) throws Throwable {
+    DriverInstance.getVariables().get(variable);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Retrieves the count of options in a list from a variable.</p>
+        </article>
+
+        <article>
+            <h2>Store Count of Elements by Locator</h2>
+            <pre>
+@Then("^Set the count of elements identified by locator \"([^\"]*)\" on the \"([^\"]*)\" page in a variable \"([^\"]*)\"$")
+public void storeElementCountByLocators(String Locators, String PageName, String VariableName) throws Throwable {
+    HashMap<String, String> Variables = new HashMap<>();
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    String data = String.valueOf(webDriver.getwebelementscount(locators.getlocator("//locators/" + Locators)));
+    Variables.put(VariableName, data);
+    Variables.putAll(DriverInstance.getVariables());
+    DriverInstance.setVariables(Variables);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Stores the count of elements identified by a locator on a page in a variable.</p>
+        </article>
+
+        <article>
+            <h2>Retrieve Element Count from Variable</h2>
+            <pre>
+@Then("^Get the count of elements identified by locator from a variable \"([^\"]*)\"$")
+public void storeElementCountByLocators(String variable) throws Throwable {
+    DriverInstance.getVariables().get(variable);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Retrieves the count of elements identified by a locator from a variable.</p>
+        </article>
+
+        <article>
+            <h2>Store Element Text</h2>
+            <pre>
+@Then("^Set text from \"([^\"]*)\" on the \"([^\"]*)\" page in a variable \"([^\"]*)\"$")
+public void storeElementText(String Locators, String PageName, String VariableName) throws Throwable {
+    HashMap<String, String> Variables = new HashMap<>();
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    String data = webDriver.getText(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    Variables.put(VariableName, data);
+    Variables.putAll(DriverInstance.getVariables());
+    DriverInstance.setVariables(Variables);
+    System.out.println("VariableName :" + DriverInstance.getVariables().get(VariableName));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Stores the text of an element located by the given locator on the specified page into a variable.</p>
+        </article>
+
+        <article>
+            <h2>Retrieve Element Text from Variable</h2>
+            <pre>
+@Then("^Get Element Text from a variable \"([^\"]*)\"$")
+public void GetElementText(String variable) throws Throwable {
+    DriverInstance.getVariables().get(variable);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Retrieves the text of an element from a variable.</p>
+        </article>
+
+        <article>
+            <h2>Store Element Tag Name</h2>
+            <pre>
+@Then("^Set Tag Name of \"([^\"]*)\" on the \"([^\"]*)\" page in a variable \"([^\"]*)\"$")
+public void storeElementTagName(String Locators, String PageName, String VariableName) throws Throwable {
+    HashMap<String, String> Variables = new HashMap<>();
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    String data = webDriver.returnElementTagName(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    Variables.put(VariableName, data);
+    Variables.putAll(DriverInstance.getVariables());
+    DriverInstance.setVariables(Variables);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Stores the tag name of an element located by the given locator on the specified page into a variable with the given name.</p>
+        </article>
+
+        <article>
+            <h2>Retrieve Element Tag Name from Variable</h2>
+            <pre>
+@Then("^Get Tag Name from a variable \"([^\"]*)\"$")
+public void getElementTagName(String variable) throws Throwable {
+    DriverInstance.getVariables().get(variable);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Retrieves the tag name of an element from a variable.</p>
+        </article>
+
+        <article>
+            <h2>Verify Element Attribute Value</h2>
+            <pre>
+@Then("^Verify that the \"([^\"]*)\" on the \"([^\"]*)\" page has value \"([^\"]*)\"$")
+public void VerifyThatElementHasValue(String Locators, String PageName, String AttributeValue) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    String data = webDriver.returnElementAttrubuteValue(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), "value");
+    Assert.assertEquals(data.toLowerCase(), AttributeValue.toLowerCase(), "Value not matched!!");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that an element on the specified page has the expected value.</p>
+        </article>
+
+        <article>
+            <h2>Verify Element Text</h2>
+            <pre>
+@Then("^Verify that the \"([^\"]*)\" on the \"([^\"]*)\" page displays text \"([^\"]*)\"$")
+public void VerifyThatElementDisplaysText(String Locators, String PageName, String Text) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    String data = webDriver.getText(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    Assert.assertEquals(data.toLowerCase(), Text.toLowerCase(), "Text not matched!!");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that an element on the specified page displays the expected text.</p>
+        </article>
+
+        <article>
+            <h2>Select Radio Button by Label</h2>
+            <pre>
+@Then("^Select element by label \"([^\"]*)\" in the radio button group$")
+public void SelectRadioElementByLabelName(String LabelName) throws Throwable {
+    webDriver.Clickon(webDriver.getwebelement("//Label[text()='" + LabelName + "']"));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Selects a radio button with the given label name.</p>
+        </article>
+
+        <article>
+            <h2>Select Option by Value</h2>
+            <pre>
+@Then("^Select option by value \"([^\"]*)\" in the list \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void SelectOptionByValue(String selectByValue, String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.selectOptionByValue(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), selectByValue);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Selects an option by its value in a dropdown list located by the given locator on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Select Option by Text</h2>
+            <pre>
+@Then("^Select option by text \"([^\"]*)\" in the list \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void SelectOptionByText(String selectByText, String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.selectOptionByText(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), selectByText);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Selects an option by its text in a dropdown list located by the given locator on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Select Option by Index</h2>
+            <pre>
+@Then("^Select option by index \"([^\"]*)\" in the list \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void SelectOptionByIndex(String selectByIndex, String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.selectOptionByIndex(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), selectByIndex);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Selects an option by its index in a dropdown list located by the given locator on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Right Click on Element</h2>
+            <pre>
+@Then("^Right click on the element \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void RightClickonElementElement(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.ActionWithElement(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), "RightClick");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Performs a right-click action on an element located by the given locator on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Mouseover on Element</h2>
+            <pre>
+@Then("^Mouseover on the element \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void MouseoverWithElement(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.ActionWithElement(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), "Mouseover");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Performs a mouseover action on an element located by the given locator on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Double Click on Element</h2>
+            <pre>
+@Then("^Double click on the element \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void DoubleClickWithElement(String Locators, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.ActionWithElement(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), "DoubleClick");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Performs a double-click action on an element located by the given locator on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Drag and Drop Element</h2>
+            <pre>
+@Then("^Drag the element \"([^\"]*)\" and drop on the element \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void DragAndDropElement(String Locators, String Locators2, String PageName) throws Throwable {
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.DragAndDropElement(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)),
+            webDriver.getwebelement(locators.getlocator("//locators/" + Locators2)));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Drags an element located by the first locator and drops it onto another element located by the second locator on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Switch to Window by Title</h2>
+            <pre>
+@Then("^Switch to the window By title \"([^\"]*)\"")
+public void SwitchToWindowWithTitle(String WindowTitle) throws Throwable {
+    webDriver.SwitchWindowTitled(WindowTitle);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Switches to a window with the specified title.</p>
+        </article>
+
+        <article>
+            <h2>Switch to Window by Index</h2>
+            <pre>
+@Then("^Switch to the window By Index \"([^\"]*)\"")
+public void SwitchWindowByIndex(String index) throws Throwable
+{
+    webDriver.SwitchWindowByIndex(index);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Switches to a browser window based on the provided index.</p>
+        </article>
+
+        <article>
+            <h2>Switch to Parent Window</h2>
+            <pre>
+@Then("^Switch to the parent Window")
+public void SwitchToParentWindod() throws Throwable
+{
+    webDriver.SwitchToParentWindod();
+}
+        </pre>
+            <p><strong>Purpose:</strong> Switches to the parent browser window.</p>
+        </article>
+
+        <article>
+            <h2>Close Current Window</h2>
+            <pre>
+@Then("^Close the current window")
+public void CloseCurrentWindows() throws Throwable
+{
+    webDriver.CloseCurrentWindows();
+}
+        </pre>
+            <p><strong>Purpose:</strong> Closes the current browser window.</p>
+        </article>
+
+        <article>
+            <h2>Close All Windows</h2>
+            <pre>
+@Then("^Close all windows")
+public void CloseAllWindows() throws Throwable
+{
+    webDriver.CloseAllWindows();
+}
+        </pre>
+            <p><strong>Purpose:</strong> Closes all open browser windows.</p>
+        </article>
+
+        <article>
+            <h2>Close Window by Title</h2>
+            <pre>
+@Then("^Close the window with title \"([^\"]*)\"")
+public void CloseWindowByTitle(String WindowTitle) throws Throwable
+{
+    webDriver.CloseWindowByTitle(WindowTitle);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Closes a browser window based on the provided title.</p>
+        </article>
+
+        <article>
+            <h2>Close Window by Index</h2>
+            <pre>
+@Then("^Close the window with index \"([^\"]*)\"")
+public void CloseWindowByIndex(String index) throws Throwable
+{
+    webDriver.CloseWindowByIndex(index);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Closes a browser window based on the provided index.</p>
+        </article>
+
+        <article>
+            <h2>Navigate to URL</h2>
+            <pre>
+@Then("^Go to \"([^\"]*)\"")
+public void GotoURL(String URL) throws Throwable
+{
+    webDriver.GOto(URL);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Navigates to the specified URL.</p>
+        </article>
+
+        <article>
+            <h2>Switch to Parent Page</h2>
+            <pre>
+@Then("^Switch to the parent page")
+public void SwitchToParentPage() throws Throwable
+{
+    webDriver.SwitchToParentPage();
+}
+        </pre>
+            <p><strong>Purpose:</strong> Switches to the parent page.</p>
+        </article>
+
+        <article>
+            <h2>Switch to Parent Frame</h2>
+            <pre>
+@Then("^Switch to the parent frame of the active element")
+public void SwitchToParentFrame() throws Throwable
+{
+    webDriver.SwitchToParentFrame();
+}
+        </pre>
+            <p><strong>Purpose:</strong> Switches to the parent frame of the currently active element.</p>
+        </article>
+
+        <article>
+            <h2>Switch to Frame by Name</h2>
+            <pre>
+@Then("^Switch to the frame named \"([^\"]*)\"")
+public void SwitchToFrame(String frameName) throws Throwable
+{
+    webDriver.SwitchToFrame(frameName);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Switches to a frame identified by the provided name.</p>
+        </article>
+
+        <article>
+            <h2>Switch to Frame by Index</h2>
+            <pre>
+@Then("^Switch to the frame by index \"([^\"]*)\"")
+public void SwitchToFrameByIndex(String index) throws Throwable
+{
+    webDriver.SwitchToFrameByIndex(index);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Switches to a frame identified by the provided index.</p>
+        </article>
+
+        <article>
+            <h2>Switch to Frame by Element</h2>
+            <pre>
+@Then("^Switch to the frame By element \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void SwitchToFrameByElement(String Locators, String PageName) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.SwitchToFrameByElement(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Switches to a frame identified by a locator on a specific page.</p>
+        </article>
+
+        <article>
+            <h2>Delete Cookie by Name</h2>
+            <pre>
+@Then("^Delete cookie with name \"([^\"]*)\"")
+public void DeleteCookies(String Cookies) throws Throwable
+{
+    webDriver.DeleteCookiesWithName(Cookies);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Deletes a cookie based on the provided name.</p>
+        </article>
+
+        <article>
+            <h2>Delete All Cookies</h2>
+            <pre>
+@Then("^Delete all cookies from the current session")
+public void DeleteAllCookies() throws Throwable
+{
+    webDriver.DeleteAllCookies();
+}
+        </pre>
+            <p><strong>Purpose:</strong> Deletes all cookies from the current session.</p>
+        </article>
+
+        <article>
+            <h2>Refresh Page</h2>
+            <pre>
+@Then("^Click on the Refresh button in the browser")
+public void Refresh() throws Throwable
+{
+    webDriver.Refresh();
+}
+        </pre>
+            <p><strong>Purpose:</strong> Clicks the refresh button in the browser.</p>
+        </article>
+
+        <article>
+            <h2>Forward Navigation</h2>
+            <pre>
+@Then("^Click on the Forward button in the browser")
+public void Forward() throws Throwable
+{
+    webDriver.Forward();
+}
+        </pre>
+            <p><strong>Purpose:</strong> Clicks the forward button in the browser.</p>
+        </article>
+
+        <article>
+            <h2>Back Navigation</h2>
+            <pre>
+@Then("^Click on the Back button in the browser")
+public void Back() throws Throwable
+{
+    webDriver.Back();
+}
+        </pre>
+            <p><strong>Purpose:</strong> Clicks the back button in the browser.</p>
+        </article>
+
+        <article>
+            <h2>Accept Alert</h2>
+            <pre>
+@Then("^Click OK button in the alert")
+public void AcceptAlert() throws Throwable
+{
+    webDriver.AcceptAlert();
+}
+        </pre>
+            <p><strong>Purpose:</strong> Accepts an alert by clicking the OK button.</p>
+        </article>
+
+        <article>
+            <h2>Cancel Alert</h2>
+            <pre>
+@Then("^Click on Cancel button in the alert")
+public void CancelAlert() throws Throwable
+{
+    webDriver.CancelAlert();
+}
+        </pre>
+            <p><strong>Purpose:</strong> Cancels an alert by clicking the Cancel button.</p>
+        </article>
+
+        <article>
+            <h2>Click on Element</h2>
+            <pre>
+@Then("^Click on element \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void ClickOn(String Locators, String PageName) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    try {
+        webDriver.Clickon(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    } catch (Exception e) {
+        webDriver.waitforElementtobeclickable(locators.getlocator("//locators/" + Locators));
+        webDriver.Clickon(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+    }
+}
+        </pre>
+            <p><strong>Purpose:</strong> Clicks on an element specified by locator on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Click If Element Visible</h2>
+            <pre>
+@Then("^Click If element \"([^\"]*)\" is visible on the \"([^\"]*)\" page$")
+public void ClickOnIfElementVisible(String Locators, String PageName) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.ClickonIfElementVisible(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Clicks on an element if it is visible on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Clear Field Value</h2>
+            <pre>
+@Then("^Clear the value displayed in the \"([^\"]*)\" field on the \"([^\"]*)\" page$")
+public void ClearTheValueDisplayed(String Locators, String PageName) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.ClearAttributeValue(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Clears the value displayed in the specified field on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Clear Field Text</h2>
+            <pre>
+@Then("^Clear the text displayed in the \"([^\"]*)\" field on the \"([^\"]*)\" page$")
+public void ClearThetextDisplayed(String Locators, String PageName) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.ClearText(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Clears the text displayed in the specified field on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Verify Link Opens in New Window or Tab</h2>
+            <pre>
+@Then("^Verify that the link \"([^\"]*)\" opens in a new window or tab on the \"([^\"]*)\" page$")
+public void OpenLinkIntoNewTabOrWindow(String Locators, String PageName) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.verifyLinksOpenNewTanOrWindows(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that a link opens in a new window or tab.</p>
+        </article>
+
+        <article>
+            <h2>Update Parameter with Attribute Value</h2>
+            <pre>
+@Then("^Update parameter \"([^\"]*)\" with value of \"([^\"]*)\" attribute from the element \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void setAttribute(String AttValue, String Attributename, String Locators, String PageName) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.setAttributeUsingJS(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), Attributename, AttValue);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Updates a parameter with the value of an attribute from a specified element.</p>
+        </article>
+
+        <article>
+            <h2>Verify Element Value Less Than</h2>
+            <pre>
+@Then("^Verify that the element \"([^\"]*)\" on the \"([^\"]*)\" page displays a value less than \"([^\"]*)\"$")
+public void VerifyValueLessThan(String Locators, String PageName, String ExpValue) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.VerifyElementValueLessThan(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), Integer.parseInt(ExpValue));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that an element's displayed value is less than a specified value.</p>
+        </article>
+
+        <article>
+            <h2>Verify Element Value Greater Than</h2>
+            <pre>
+@Then("^Verify that the element \"([^\"]*)\" on the \"([^\"]*)\" page displays a value greater than \"([^\"]*)\"$")
+public void VerifyValueGreaterThan(String Locators, String PageName, String ExpValue) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.VerifyElementValueGreaterThan(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), Integer.parseInt(ExpValue));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that an element's displayed value is greater than a specified value.</p>
+        </article>
+
+        <article>
+            <h2>Verify Element Value Less Than or Equal To</h2>
+            <pre>
+@Then("^Verify that the element \"([^\"]*)\" on the \"([^\"]*)\" page displays a value less than or equal to \"([^\"]*)\"$")
+public void VerifyValueLessThanOrEqualTo(String Locators, String PageName, String ExpValue) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.VerifyElementValueLessThanOrEqualTo(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), Integer.parseInt(ExpValue));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that an element's displayed value is less than or equal to a specified value.</p>
+        </article>
+
+        <article>
+            <h2>Verify Element Value Greater Than or Equal To</h2>
+            <pre>
+@Then("^Verify that the element \"([^\"]*)\" on the \"([^\"]*)\" page displays a value greater than or equal to \"([^\"]*)\"$")
+public void VerifyValueGreaterThanOrEqualTo(String Locators, String PageName, String ExpValue) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.VerifyElementValueGreaterThanOrEqualTo(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), Integer.parseInt(ExpValue));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Verifies that an element's displayed value is greater than or equal to a specified value.</p>
+        </article>
+
+        <article>
+            <h2>Upload File</h2>
+            <pre>
+@Then("^Upload file \"([^\"]*)\" using the file type \"([^\"]*)\" on the \"([^\"]*)\" page$")
+public void UploadFile(String FilePath, String Locators, String PageName) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.SendKeys(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), FilePath);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Uploads a file using the file type and locator specified on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Enter Text</h2>
+            <pre>
+@Then("^Enter text \"([^\"]*)\" in the element \"([^\"]*)\" field on the \"([^\"]*)\" page$")
+public void EnterText(String Text, String Locators, String PageName) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    try {
+        webDriver.SendKeys(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), Text);
+    }
+    catch(Exception e)
+    {
+        webDriver.waitUntilTheElementIsVisible(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+        webDriver.SendKeys(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), Text);
+    }
+}
+        </pre>
+            <p><strong>Purpose:</strong> Enters text into a specified field on the specified page.</p>
+        </article>
+
+        <article>
+            <h2>Enter Text Using JavaScript</h2>
+            <pre>
+@Then("^Enter text \"([^\"]*)\" in the element \"([^\"]*)\" field on the \"([^\"]*)\" page using javascript executor$")
+public void EnterTextUsingJS(String Text, String Locators, String PageName) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.SendKeysUsingJS(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)), Text);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Enters text into a specified element on a given page using JavaScript Executor.</p>
+        </article>
+
+        <article>
+            <h2>Click on Element to Open in New Window and Switch</h2>
+            <pre>
+@Then("^Click on element \"([^\"]*)\" on the \"([^\"]*)\" page to open in a new window and switch to the new window$")
+public void ClickOnElementToOpenInNewWindowAndSwitchToIt(String Text, String Locators, String PageName) throws Throwable
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.ClickOnElementToOpenInNewWindowAndSwitchToIt(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Clicks on an element on a specified page to open it in a new window and switches to the new window.</p>
+        </article>
+
+        <article>
+            <h2>Press Enter Key</h2>
+            <pre>
+@Then("^Press Enter/Return Key$")
+public void PressEnter() throws Throwable
+{
+    webDriver.SendKeyBoardKeysUsingActions(Keys.ENTER);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Presses the Enter/Return key.</p>
+        </article>
+
+        <article>
+            <h2>Press Tab Key</h2>
+            <pre>
+@Then("^Press Tab Key$")
+public void PressTab() throws Throwable
+{
+    webDriver.SendKeyBoardKeysUsingActions(Keys.TAB);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Presses the Tab key.</p>
+        </article>
+
+        <article>
+            <h2>Press Escape Key</h2>
+            <pre>
+@Then("^Press Esc Key$")
+public void PressEsc() throws Throwable
+{
+    webDriver.SendKeyBoardKeysUsingActions(Keys.ESCAPE);
+}
+        </pre>
+            <p><strong>Purpose:</strong> Presses the Escape key.</p>
+        </article>
+
+        <article>
+            <h2>Press Shift + Delete Keys</h2>
+            <pre>
+@Then("^Press Shift+Delete Keys$")
+public void PressShiftAndDelete() throws Throwable
+{
+    webDriver.PressShiftDelete();
+}
+        </pre>
+            <p><strong>Purpose:</strong> Presses Shift + Delete keys.</p>
+        </article>
+
+        <article>
+            <h2>Press Specified Key</h2>
+            <pre>
+@Then("^Press \"([^\"]*)\" Key$")
+public void PressKeys(String text) throws Throwable
+{
+    webDriver.SendKeyBoardKeysUsingActions(Keys.valueOf(text));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Presses a specified key, where the key is provided as a string.</p>
+        </article>
+
+        <article>
+            <h2>Log Message</h2>
+            <pre>
+@Then("^Log: \"([^\"]*)\"$")
+public static void log(String message)
+{
+    System.out.println(message);
+    ExtentCucumberAdapter.addTestStepLog("<table style='color:DarkGreen;'><tr><td><b>" + message + "</b></td></tr><tr></table>");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Logs a message to the console and test report.</p>
+        </article>
+
+        <article>
+            <h2>Log Message with Variable Value</h2>
+            <pre>
+@Then("^Log: \"([^\"]*)\" is : \"([^\"]*)\"$")
+public void log1(String message, String VariableName)
+{
+    System.out.println(message);
+    String VariableValue = DriverInstance.getVariables().get(VariableName);
+    ExtentCucumberAdapter.addTestStepLog("<table><tr><td><b>" + message + " is : " + VariableValue + "</b></td></tr><tr></table>");
+}
+        </pre>
+            <p><strong>Purpose:</strong> Logs a message along with the value of a specified variable to the console and test report.</p>
+        </article>
+
+        <article>
+            <h2>Scroll Into View</h2>
+            <pre>
+@Then("^Scroll Into \"([^\"]*)\" on \"([^\"]*)\" Page$")
+public void Scroll(String Locators, String PageName) throws DocumentException, InterruptedException
+{
+    locators = new xmlreader("src\\test\\resources\\locators\\" + PageName + ".xml");
+    webDriver.ScrollIntoView(webDriver.getwebelement(locators.getlocator("//locators/" + Locators)));
+}
+        </pre>
+            <p><strong>Purpose:</strong> Scrolls into view of a specified element on a given page.</p>
+        </article>
+    </div>
+</body>
+
+</html>
