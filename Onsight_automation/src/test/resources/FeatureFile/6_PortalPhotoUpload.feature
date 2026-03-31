@@ -2,7 +2,7 @@ Feature: 5_PortalJobPhoto
 
    # Portal JobPhoto upload
   # --------------------------------------------------
-  @Regression @Portal @Stage @WEB @Android @Demoab
+  @Regression @Portal @Stage @WEB @Android @Demo2
   Scenario: Verify uploaded job photo in web portal
     Given I am at OnSight portal login screen
     And I login to the application with valid user
