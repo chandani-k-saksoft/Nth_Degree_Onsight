@@ -159,9 +159,8 @@ Feature: 4_JobPhoto
     And I click on "ADD PHOTOS" button
     And I click on "OK" button
     And I get "Install Progress" add photo
-    And I navigate to gallery
-    And I select photo from gallery
-    And I click on add photo button
+    And I navigate to camera
+    And I select photo from camera
     And I click on "ADD PHOTOS" button
     And I click on "OK" button
     And I verify "Install Freight" image count click
@@ -182,7 +181,7 @@ Feature: 4_JobPhoto
     And I receive mail from gmail having subject as "Nth Degree Project Update for Saksoft at Saksoft Test Show 2026"
     Then I verify "Install Progress" image count increase by "oldImageCount3"
 
-  @Regression @Dashboard1 @Stage_mob @Android @MOBILE @Test2 @Demo2
+  @Regression @Dashboard1 @Stage_mob @Android @MOBILE @Test2
   Scenario: Verify job photo show details
     And I navigate to job Updates screen
     And I enter "W-256523" job number
@@ -197,7 +196,7 @@ Feature: 4_JobPhoto
       | Close Date | 03/27/2026 8:00 AM |
       | Hall Clear | 04/10/2026 8:00 AM |
 
-  @Regression @JobPhoto @Stage_mob @Android @MOBILE @Demo2
+  @Regression @JobPhoto @Stage_mob @Android @MOBILE
   Scenario: Verify to added job photo for multiple category with evaluation screen navigation
     And I navigate to job Updates screen
     And I enter "W-256523" job number
@@ -249,8 +248,42 @@ Feature: 4_JobPhoto
     Then I verify "Install Freight" image count increase by "oldImageCount1"
     Then I verify "Show Ready" image count increase by "oldImageCount2"
 
+  @Regression @JobPhoto @Stage_mob @Android @MOBILE
+  Scenario: Verify to upload photo for two category
+    And I navigate to job Updates screen
+    And I enter "W-256523" job number
+    And I click on "SUBMIT" button
+    Then I verify I am at "W-256523" screen
+    And I navigate to "Job Photos" sub module
+    Then I verify I am at "W-256523" screen
+    And I get "Install Freight" image count as "oldImageCount1"
+    And I get "Install Progress" image count as "oldImageCount2"
+    And I get "Install Freight" add photo
+    And I navigate to gallery
+    And I select photo from gallery
+    And I click on add photo button
+    And I click on "ADD PHOTOS" button
+    And I click on "OK" button
+    And I get "Install Progress" add photo
+    And I navigate to camera
+    And I select photo from camera
+    And I click on "ADD PHOTOS" button
+    And I click on "OK" button
+    And I verify "Install Freight" image count click
+    And I press device Back button
+#    And I click on add photo plus button
+    And I click on "Install Freight" check box
+    And I click on "Install Progress" check box
+    And I click on Install Freight send mail check box
+    And I click on "SUBMIT" button
+    And I click on "OK" button
+    And I click on "YES" button
+    And I receive mail from gmail having subject as "Nth Degree Project Update for Saksoft at Saksoft Test Show 2026"
+    Then I verify "Install Freight" image count increase by "oldImageCount1"
+    Then I verify "Install Progress" image count increase by "oldImageCount2"
+
   @Regression @JobPhoto @Stage_mob @Android @MOBILE @Demo2
-  Scenario: Verify if user try to navigate job number screen with invalid job number
+  Scenario: Verify if user try to navigate job number screen with invalid job number (Expected Failure)
     And I navigate to job Updates screen
     And I enter "w-123456" job number
     And I click on "SUBMIT" button

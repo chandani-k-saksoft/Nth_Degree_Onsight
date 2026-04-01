@@ -161,6 +161,15 @@ public class LoginScreenHelperBDD {
             iClickOnButton("VERIFY");
         }
     }
+    @Given("I login as {string} user")
+    public void iLoginAsdUser(String username) throws Exception {
+        if (driverInstance.getCommonVariables("skipFlow") == null) {
+            Thread.sleep(3000);
+            login(username);
+            iClickOnButton("OK");
+            iClickOnButton("VERIFY");
+        }
+    }
 
     @Given("I login with registered added user")
     public void iLoginWithRegisteredAddedUser() throws Exception {
