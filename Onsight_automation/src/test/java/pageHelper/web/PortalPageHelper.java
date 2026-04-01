@@ -70,9 +70,12 @@ public class PortalPageHelper {
 
     @Given("I login to the application with valid user")
     public void i_login_to_the_application_with_valid_user() throws Exception {
-        webDriver.sendKeys(getPortalLocator("emailField"), prop.readProperty("SystemAdminUsername"));
-        webDriver.sendKeys(getPortalLocator("passwordField"), prop.readProperty("orgCorePassword"));
-        webDriver.clickOn(getPortalLocator("loginButton"));
+        webDriver.openURL(new PropertyReader().readProperty("portal_admin_url"));
+        if(getPortalLocator("emailField")!=null) {
+            webDriver.sendKeys(getPortalLocator("emailField"), prop.readProperty("SystemAdminUsername"));
+            webDriver.sendKeys(getPortalLocator("passwordField"), prop.readProperty("orgCorePassword"));
+            webDriver.clickOn(getPortalLocator("loginButton"));
+        }
     }
 
     @Given("I verify I am at dashboard page")

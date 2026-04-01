@@ -318,6 +318,11 @@ public class LoginScreenHelperBDD {
         login("onsightdemo@saksoft.com");
         iClickOnButton("OK");
     }
+
+    @And("I made login mandatory")
+    public void iMadeLoginMandatory() {
+        driverInstance.setCommonVariables("skipFlow", null);
+    }
 }
 
 

@@ -330,8 +330,8 @@ public class BDDDriver {
         boolean SecuryScan = Boolean.valueOf(pr.readProperty("SecurityScan" + browser));
         String app = pr.readProperty("portal_admin_url");
 
-
-        WEB_DRIVER_THREAD_LOCAL.set(webDriver.webInit(browser, app, false, SecuryScan));
+        if (WEB_DRIVER_THREAD_LOCAL.get() == null)
+            WEB_DRIVER_THREAD_LOCAL.set(webDriver.webInit(browser, app, false, SecuryScan));
         try {
             // Initialize and configure ZAP scanner
             ZAP_SCANNER_THREAD_LOCAL.set(webDriver.returnZapScanner());
@@ -410,9 +410,9 @@ public class BDDDriver {
             String sourcePath = "data:image/png;base64," + ((TakesScreenshot) WEB_DRIVER_THREAD_LOCAL.get()).
                     getScreenshotAs(OutputType.BASE64);
             ExtentCucumberAdapter.getCurrentStep().log(Status.INFO, MediaEntityBuilder.createScreenCaptureFromBase64String(sourcePath).build());
+            WEB_DRIVER_THREAD_LOCAL.get().quit();
+            WEB_DRIVER_THREAD_LOCAL.remove();
         }
-
-        WEB_DRIVER_THREAD_LOCAL.get().quit();
     }
 
     @Before("@DESKTOP")

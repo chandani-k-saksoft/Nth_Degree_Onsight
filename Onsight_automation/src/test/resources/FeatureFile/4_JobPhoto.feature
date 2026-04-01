@@ -196,7 +196,7 @@ Feature: 4_JobPhoto
       | Close Date | 03/27/2026 8:00 AM |
       | Hall Clear | 04/10/2026 8:00 AM |
 
-  @Regression @JobPhoto @Stage_mob @Android @MOBILE @TestDemo1
+  @Regression @JobPhoto @Stage_mob @Android @MOBILE @TestDemo
   Scenario: Verify to added job photo for multiple category with evaluation screen navigation
     And I navigate to job Updates screen
     And I enter "W-256523" job number
@@ -248,7 +248,7 @@ Feature: 4_JobPhoto
     Then I verify "Install Freight" image count increase by "oldImageCount1"
     Then I verify "Show Ready" image count increase by "oldImageCount2"
 
-  @Regression @JobPhoto @Stage_mob @Android @MOBILE @Demo2
+  @Regression @JobPhoto @Stage_mob @Android @MOBILE @TestDemo3
   Scenario: Verify to upload photo for two category
     And I navigate to job Updates screen
     And I enter "W-256523" job number
@@ -277,12 +277,11 @@ Feature: 4_JobPhoto
     And I click on Install Freight send mail check box
     And I click on "SUBMIT" button
     And I click on "OK" button
-    And I click on "YES" button
     And I receive mail from gmail having subject as "Nth Degree Project Update for Saksoft at Saksoft Test Show 2026"
     Then I verify "Install Freight" image count increase by "oldImageCount1"
     Then I verify "Install Progress" image count increase by "oldImageCount2"
 
-  @Regression @JobPhoto @Stage_mob @Android @MOBILE @Demo2
+  @Regression @JobPhoto @Stage_mob @Android @MOBILE @TestDemo
   Scenario: Verify if user try to navigate job number screen with invalid job number (Expected Failure)
     And I navigate to job Updates screen
     And I enter "w-123456" job number
