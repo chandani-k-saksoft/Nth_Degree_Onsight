@@ -1,21 +1,19 @@
 Feature: 7_Security Specs
 
-  @Regression @Registration @Stage @WEB @Android
-  Scenario: Verify security specs allowed module
-    Given I am at OnSight portal login screen
-    And I login to the application with valid user
-    And I verify I am at dashboard page
-    And I navigate to manage user screen
-    And I Verify I am at manage user list
-    And I navigate to add user screen
-    And I enter given detail for user
-      | fullName    | firstName | lastName | mobileNo   | email                        |
-      | RANDOM_Name | Automated | Random   | 7349771666 | OnSight_RANDOM@nthdegree.com |
-    And I select "Lead" as "securityLevelDropdown" dropdown
-    And I select "IND +91" as "countryCodeDropdown" dropdown
-    And I click on add user button
-    And I Verify I am at manage user list
-    #And I Verify I am at manage user list
+
+  @Regression @Security Specs @Stage_mob @Android @MOBILE @Demo2
+  Scenario Outline: Login with OTP and verify dashboard for different user roles
+    When I login to portal as admin
+    Then I update settings for "<role>" as "menuItems>"
+    When I login as "<email>" user
+    Then I land to dashboard screen
+    And user should see dashboard options "<menuItems>"
+    Examples:
+      | role      | email                 | menuItems|
+      | guest     | testone@gmail.com    | Job Updates, Lead Sheet, Onboarding, My Schedule|
+      | resource  | testtwo@gmail.com    | Job Updates, Lead , Onboarding, Promo Pictures, Field issues, My Schedule, Travel Expenses, Updates Needed |
+      | lead      | testthree@gmail.com  | Job Updates, Lead Sheet, Onboarding, Promo Pictures, My Schedule, Travel Expenses                          |
+
 
 
 
