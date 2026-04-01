@@ -1,7 +1,7 @@
 Feature: 7_Security Specs
 
 
-  @Regression @Security Specs @Stage_mob @Android @MOBILE
+  @Regression @Security_Specs @Stage_mob @Android @MOBILE
   Scenario Outline: Login with OTP and verify dashboard for different user roles
     Given I login to the application with valid user
     And I verify I am at dashboard page
