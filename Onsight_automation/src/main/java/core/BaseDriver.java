@@ -126,7 +126,7 @@ public class BaseDriver implements ApiDriver, webDriver, DesktopDriver, MobileDr
                 }
 
                 // Configure WebDriver timeouts and window settings
-                dr.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+                dr.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
                 dr.manage().deleteAllCookies();
                 dr.manage().window().maximize();
                 //log.info("Chrome Browser Launched");
@@ -140,7 +140,7 @@ public class BaseDriver implements ApiDriver, webDriver, DesktopDriver, MobileDr
 
                 // Initialize EdgeDriver
                 dr = new EdgeDriver();
-                dr.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+                dr.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
                 dr.manage().deleteAllCookies();
                 dr.manage().window().maximize();
                 //log.info("Edge Browser Launched");
@@ -200,7 +200,7 @@ public class BaseDriver implements ApiDriver, webDriver, DesktopDriver, MobileDr
         // Establish connection to WindowsDriver
         desktopSession = new WindowsDriver(new URL("http://127.0.0.1:4783"), capabilities);
         Thread.sleep(10000);
-        desktopSession.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        desktopSession.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         //log.info("Desktop App Launched");
 
         return desktopSession;

@@ -164,7 +164,7 @@ public class BaseDriverHelper implements ApiHelper, webHelper, DesktopHelper, Mo
 
         wait = new FluentWait<WebDriver>(web_driver)
                 .withTimeout(Duration.ofSeconds(5)) // Maximum timeout duration
-                .pollingEvery(Duration.ofSeconds(1)) // Polling interval
+                .pollingEvery(Duration.ofMillis(200)) // Polling interval
                 .ignoring(NoSuchElementException.class)
 
         ; // Exceptions to ignore
@@ -1103,96 +1103,47 @@ public class BaseDriverHelper implements ApiHelper, webHelper, DesktopHelper, Mo
 
     // Method to get a web element by different locators
     public WebElement getWebElement(String locator) throws InterruptedException {
-        System.out.println(new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()) + "-> Search start for - " + locator);
-        String[] finalval;
+        System.out.println(time() + " -> Search start for - " + locator);
         try {
-            el = null;
-            if (locator.startsWith("name")) {
-                finalval = locator.split("=");
-                wait.until(new Function<WebDriver, WebElement>() {
-                    public WebElement apply(WebDriver driver) {
-                        try {
-                            el = driver.findElement(By.name(finalval[1])); // Find element by name
-                        } catch (Exception e) {
-                            el = null;
-                        }
-                        if (el != null) {
-                            try {
-                                wait.until(ExpectedConditions.elementToBeClickable(el)); // Wait until element is clickable
-                            } catch (Exception e) {
-                                wait.until(ExpectedConditions.visibilityOf(el)); // Wait until element is visible
-                            }
-                        }
-                        System.out.println(new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()) + "-> Search complete for - " + locator);
-                        return el;
-                    }
-                });
-            } else if (locator.startsWith("id")) {
-                finalval = locator.split("=");
-                wait.until(new Function<WebDriver, WebElement>() {
-                    public WebElement apply(WebDriver driver) {
-                        try {
-                            el = driver.findElement(By.id(finalval[1])); // Find element by ID
-                        } catch (Exception e) {
-                            el = null;
-                        }
-                        if (el != null) {
-                            try {
-                                wait.until(ExpectedConditions.elementToBeClickable(el)); // Wait until element is clickable
-                            } catch (Exception e) {
-                                wait.until(ExpectedConditions.visibilityOf(el)); // Wait until element is visible
-                            }
-                        }
-                        System.out.println(new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()) + "-> Search complete for - " + locator);
-                        return el;
-                    }
-                });
-            } else if (locator.startsWith("css")) {
-                finalval = locator.split("=");
-                wait.until(new Function<WebDriver, WebElement>() {
-                    public WebElement apply(WebDriver driver) {
-                        try {
-                            el = driver.findElement(By.cssSelector(finalval[1])); // Find element by ID
-                        } catch (Exception e) {
-                            el = null;
-                        }
-                        if (el != null) {
-                            try {
-                                wait.until(ExpectedConditions.elementToBeClickable(el)); // Wait until element is clickable
-                            } catch (Exception e) {
-                                wait.until(ExpectedConditions.visibilityOf(el)); // Wait until element is visible
-                            }
-                        }
-                        System.out.println(new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()) + "-> Search complete for - " + locator);
-                        return el;
-                    }
-                });
-            } else if (locator.startsWith("//") || locator.startsWith("(//") || locator.startsWith("(")) {
-                wait.until(new Function<WebDriver, WebElement>() {
-                    public WebElement apply(WebDriver driver) {
-                        try {
-                            el = driver.findElement(By.xpath(locator)); // Find element by XPath
-                        } catch (Exception e) {
-                            el = null;
-                        }
-                        if (el != null) {
-                            try {
-                                wait.until(ExpectedConditions.elementToBeClickable(el)); // Wait until element is clickable
-                            } catch (Exception e) {
-                                wait.until(ExpectedConditions.visibilityOf(el)); // Wait until element is visible
-                            }
-                        }
-                        System.out.println(new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()) + "-> {XPATH} Search complete for - " + locator);
-                        return el;
-                    }
-                });
+            By by = getBy(locator);
+            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(by));
+            try {
+                element = wait.until(ExpectedConditions.elementToBeClickable(by));
+            } catch (Exception e) {
+                element = wait.until(ExpectedConditions.visibilityOfElementLocated(by));
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
 
-        return el; // Return the found element
+            System.out.println(time() + " -> Search complete for - " + locator);
+            return element;
+
+        } catch (Exception e) {
+            System.out.println(time() + " -> Element NOT found: " + locator);
+            return null;
+        }
     }
+
+    private String time() {
+        return java.time.LocalTime.now()
+                .format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
+    private By getBy(String locator) {
+        String[] val;
+
+        if (locator.startsWith("id=")) {
+            val = locator.split("=");
+            return By.id(val[1]);
+        } else if (locator.startsWith("name=")) {
+            val = locator.split("=");
+            return By.name(val[1]);
+        } else if (locator.startsWith("css=")) {
+            val = locator.split("=");
+            return By.cssSelector(val[1]);
+        } else {
+            return By.xpath(locator);
+        }
+    }
+
 
     public WebElement getDesktopelement(String locator) throws InterruptedException {
         // Print the locator for which the element is being retrieved
@@ -1326,110 +1277,54 @@ public class BaseDriverHelper implements ApiHelper, webHelper, DesktopHelper, Mo
         return flag;
     }
 
-    public WebElement getMobileElement(String locator) throws InterruptedException {
-        System.out.println(new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()) + "-> Search start for - " + locator);
-        String[] finalval;
-        el = null;
-        try {
-            if (locator.startsWith("class")) {
-                finalval = locator.split("=");
-                waitMobile.until(new Function<AppiumDriver, WebElement>() {
-                    public WebElement apply(AppiumDriver MobileDriver) {
-                        try {
-                            el = MobileDriver.findElement(new AppiumBy.ByAccessibilityId(finalval[1]));
-                        } catch (NoSuchElementException e) {
-                            el = null;
-                        }
-                        if (el != null) {
-                            try {
-                                waitMobile.until(ExpectedConditions.elementToBeClickable(el));
-                            } catch (Exception e) {
-                                waitMobile.until(ExpectedConditions.visibilityOf(el));
-                            }
-                        }
-                        System.out.println(new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()) + "-> Search complete for - " + locator);
-                        return el;
-                    }
-                });
-            } else if (locator.startsWith("id")) {
-                finalval = locator.split("=");
-//				el = mobile_driver.findElement(By.id(finalval[1]));
-                waitMobile.until(new Function<AppiumDriver, WebElement>() {
-                    public WebElement apply(AppiumDriver MobileDriver) {
-                        try {
-                            el = waitMobile.until(ExpectedConditions.elementToBeClickable(By.id(finalval[1])));
-                        } catch (Exception e) {
-                            el = null;
-                        }
-//						if (el != null) {
-//							try {
-//								waitMobile.until(ExpectedConditions.elementToBeClickable(el));
-//							} catch (Exception e) {
-//								waitMobile.until(ExpectedConditions.visibilityOf(el));
-//							}
-//						}
-                        System.out.println(new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()) + "-> Search complete for - " + locator);
-                        return el;
-                    }
-                });
-            } else if (locator.startsWith("name")) {
-                finalval = locator.split("=");
-                waitMobile.until(new Function<AppiumDriver, WebElement>() {
-                    public WebElement apply(AppiumDriver MobileDriver) {
-                        try {
-                            el = waitMobile.until(ExpectedConditions.elementToBeClickable(By.name(finalval[1])));
-                        } catch (Exception e) {
-                            el = null;
-                        }
-//						if (el != null) {
-//							try {
-//								waitMobile.until(ExpectedConditions.elementToBeClickable(el));
-//							} catch (Exception e) {
-//								waitMobile.until(ExpectedConditions.visibilityOf(el));
-//							}
-//						}
-                        System.out.println(new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()) + "-> Search complete for - " + locator);
-                        return el;
-                    }
-                });
-            } else if (locator.startsWith("automationID")) {
-                finalval = locator.split("=");
-//				el = mobile_driver.findElement(new AppiumBy.ByAccessibilityId(finalval[1]));
-                waitMobile.until(new Function<AppiumDriver, WebElement>() {
-                    public WebElement apply(AppiumDriver MobileDriver) {
-                        try {
-                            el = MobileDriver.findElement(new AppiumBy.ByAccessibilityId(finalval[1]));
-                        } catch (NoSuchElementException e) {
-                            el = null;
-                        }
-                        if (el != null) {
-                            try {
-                                waitMobile.until(ExpectedConditions.elementToBeClickable(el));
-                            } catch (Exception e) {
-                                waitMobile.until(ExpectedConditions.visibilityOf(el));
-                            }
-                        }
-                        System.out.println(new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()) + "-> Search complete for - " + locator);
-                        return el;
-                    }
-                });
-            } else if (locator.startsWith("//") || locator.startsWith("/") || locator.startsWith("(//") || locator.startsWith("(")) {
-                waitMobile.until(new Function<AppiumDriver, WebElement>() {
-                    public WebElement apply(AppiumDriver MobileDriver) {
-                        try {
-                            el = waitMobile.until(ExpectedConditions.elementToBeClickable(By.xpath(locator)));
-                        } catch (Exception e) {
-                            el = null;
-                        }
-                        System.out.println(new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date()) + "-> Search complete for - " + locator);
-                        return el;
-                    }
-                });
-            }
-        } catch (Exception e) {
-            System.out.println(" : " + e.getMessage());
+    private By getMobileBy(String locator) {
+        String[] val;
+
+        if (locator.startsWith("id=")) {
+            val = locator.split("=");
+            return By.id(val[1]);
+
+        } else if (locator.startsWith("name=")) {
+            val = locator.split("=");
+            return By.name(val[1]);
+
+        } else if (locator.startsWith("class=")) {
+            val = locator.split("=");
+            return By.className(val[1]);
+
+        } else if (locator.startsWith("automationID=")) {
+            val = locator.split("=");
+            return new AppiumBy.ByAccessibilityId(val[1]);
+
+        } else {
+            // Default XPath
+            return By.xpath(locator);
         }
-        return el;
+    }
+
+    public WebElement getMobileElement(String locator) throws InterruptedException {
+        System.out.println(time() + " -> Search start for - " + locator);
+
+        try {
+            By by = getMobileBy(locator);
+
+            WebElement element;
+
+            try {
+                // Try clickable first (best for actions)
+                element = waitMobile.until(ExpectedConditions.elementToBeClickable(by));
+            } catch (Exception e) {
+                // Fallback to visibility
+                element = waitMobile.until(ExpectedConditions.visibilityOfElementLocated(by));
+            }
+
+            System.out.println(time() + " -> Search complete for - " + locator);
+            return element;
+
+        } catch (Exception e) {
+            System.out.println(time() + " -> Element NOT found: " + locator);
+            return null;
+        }
     }
 
     public WebElement ReturnElement(String locator) {

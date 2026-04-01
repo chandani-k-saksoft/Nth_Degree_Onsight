@@ -157,4 +157,25 @@ public class PortalPageHelper {
         webDriver.scrollIntoView(getPortalLocator("editBtn"));
     }
 
+    @And("I click on {string} portal link")
+    public void iClickOnPortalLink(String linkName) throws Exception{
+        webDriver.clickOn(webDriver.getWebElement("//a[text()='" + linkName + "']"));
+    }
+    @And("I click on {string} portal button")
+    public void iClickOnPortalButton(String linkName) throws Exception{
+        webDriver.clickOn(webDriver.getWebElement("//button[text()='" + linkName + "']"));
+    }
+
+    @Then("I update settings for {string} as {string}")
+    public void iUpdateSettingsForAs(String role, String menuItems) throws Exception {
+        iClickOnPortalButton(role);
+        for (String menuItem : menuItems.split(",")) {
+//            WebElement delete = webDriver.getWebElement("//span[contains(text(),'" + menuItem.trim() + "')]/following-sibling::button/span[contains(@class,'delete')]");
+            WebElement added = webDriver.getWebElement("//span[contains(text(),'" + menuItem.trim() + "')]/following-sibling::button/span[contains(@class,'plus')]");
+//            if (delete != null)
+//                webDriver.clickOn(delete);
+            if (added != null)
+                webDriver.clickOn(added);
+        }
+    }
 }

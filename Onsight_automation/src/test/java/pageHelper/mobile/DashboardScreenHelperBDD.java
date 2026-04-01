@@ -74,14 +74,20 @@ public class DashboardScreenHelperBDD {
 //        mobileDriver.clickOn(getMobileLocator("hamburgerIcon"));
         List<List<String>> rows = dataTable.asLists(String.class);
         for (List<String> row : rows) {
-            boolean found = mobileDriver.isElementPresent(getMobileLocator("screenTitle", "{{NAVIGATION_MENU}}", row.get(0)));
-            boolean found1 = mobileDriver.isElementPresent(getMobileLocator("navigationMenu", "{{NAVIGATION_MENU}}", row.get(0)));
-            if (!(found || found1)) {
-                mobileDriver.scrollScreenDown(1);
-                found = mobileDriver.isElementPresent(getMobileLocator("screenTitle", "{{NAVIGATION_MENU}}", row.get(0)));
-                found1 = mobileDriver.isElementPresent(getMobileLocator("navigationMenu", "{{NAVIGATION_MENU}}", row.get(0)));
+            String rowVal=row.get(0).trim();
+            for(String row_value : rowVal.split(",")) {
+                row_value=row_value.trim();
+                String screenTitleLoc = locators.getMobileLocator("//locators/dashboard/screenTitle").replace("{{NAVIGATION_MENU}}", row_value);
+                String navigationMenuLoc = locators.getMobileLocator("//locators/dashboard/navigationMenu").replace("{{NAVIGATION_MENU}}", row_value);
+
+                String finalLoc = screenTitleLoc +" | "+navigationMenuLoc;
+                boolean found = mobileDriver.isElementPresent(mobileDriver.getMobileElement(finalLoc));
+                if (!(found)) {
+                    mobileDriver.scrollScreenDown(1);
+                    found = mobileDriver.isElementPresent(mobileDriver.getMobileElement(finalLoc));
+                }
+                Assert.assertTrue(found , row_value + " is not found");
             }
-            Assert.assertTrue(found || found1, row.get(0) + " is not found");
         }
     }
 
@@ -171,5 +177,14 @@ public class DashboardScreenHelperBDD {
             }
             Assert.assertTrue(found, title + " is not found");
         }
+    }
+
+    @And("I click on Ellipsis button")
+    public void iClickOnEllipsisButton() throws Exception {
+        mobileDriver.clickOn(getMobileLocator("elipsisBtn"));
+    }
+
+    @And("I click on Logout button")
+    public void iClickOnLogoutButton() {
     }
 }

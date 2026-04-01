@@ -196,7 +196,7 @@ Feature: 4_JobPhoto
       | Close Date | 03/27/2026 8:00 AM |
       | Hall Clear | 04/10/2026 8:00 AM |
 
-  @Regression @JobPhoto @Stage_mob @Android @MOBILE
+  @Regression @JobPhoto @Stage_mob @Android @MOBILE @TestDemo1
   Scenario: Verify to added job photo for multiple category with evaluation screen navigation
     And I navigate to job Updates screen
     And I enter "W-256523" job number
@@ -227,17 +227,17 @@ Feature: 4_JobPhoto
     And I click on "OK" button
     And I click on "YES" button
     And I select answer of questions at the screen
-      | question                                  | answer |
-      | Was freight on time?                      | NO    |
-      | Any issues with the hanging sign?         | NO     |
-      | Any damages to exhibit properties?        | No     |
-      | Were all services ordered?                | YES    |
-      | Were any extra services ordered on-site?  | YES     |
-      | Did set up start on time?                 | YES    |
-      | Was source client satisfied with install? | YES    |
-      | Were the drawings correct?                | YES    |
-      | Did you have set-up/electrical drawings?  | YES     |
-      | Any issues with the carpet?               | NO     |
+      | question                                  | answer |textEnabled?|
+      | Was freight on time?                      | NO    |   YES         |
+      | Any issues with the hanging sign?         | NO     |  NO         |
+      | Any damages to exhibit properties?        | No     |  NO         |
+      | Were all services ordered?                | YES    |  NO         |
+      | Were any extra services ordered on-site?  | YES     | YES         |
+      | Did set up start on time?                 | YES    |  NO         |
+      | Was source client satisfied with install? | YES    |  NO         |
+      | Were the drawings correct?                | YES    |  NO         |
+      | Did you have set-up/electrical drawings?  | YES     |  NO        |
+      | Any issues with the carpet?               | NO     |  NO         |
     And I click on "SUBMIT" button
     And I click on "YES" button
     And I click on "OK" button

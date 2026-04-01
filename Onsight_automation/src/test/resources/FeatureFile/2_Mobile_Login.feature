@@ -71,18 +71,18 @@ Feature: 2_Mobile_Login
 #    And I verify I got the "We will be verifying the phone number attached with this email" message
     And I land to enter email screen
 
-  @Regression @Login @Stage_mob @Android @MOBILE
+  @Regression @Login @Stage_mob @Android @MOBILE @TestDemo1
   Scenario: Verify to login with registered user with invalid otp
     Then Marketing Page 1 should be displayed
     When The user taps on the skip button on Marketing Page 1
     Then I land to enter email screen
-   Given I login with registered user
-#    And I login with registered added user
-    #And I verify I got the "We will be verifying the phone number attached with this email" message
-    And I click on "OK" button
+   Given I login with resource registered user
     And I clear otp field
-#    And I enter invalid otp
-#    And I verify I got the "verification code is invalid" message
+    And I clear otp field and enter invalid
+    And I click on "VERIFY" button
+    And I verify I got the verification code is invalid message
+#   And I verify I got the "Verification code is invalid" message
+    And I land to dashboard screen
 #
   @Regression @Login @Stage_mob @Android @MOBILE @Test
   Scenario: Verify to login with registered user with resend otp

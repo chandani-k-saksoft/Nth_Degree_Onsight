@@ -162,7 +162,7 @@ public class LoginScreenHelperBDD {
         }
     }
     @Given("I login as {string} user")
-    public void iLoginAsdUser(String username) throws Exception {
+    public void iLoginAsUser(String username) throws Exception {
         if (driverInstance.getCommonVariables("skipFlow") == null) {
             Thread.sleep(3000);
             login(username);
@@ -305,7 +305,20 @@ public class LoginScreenHelperBDD {
     }
 
 
+    @And("I verify I got the verification code is invalid message")
+    public void iVerifyIGotTheVerificationCodeIsInvalidMessage() throws Exception {
+        Thread.sleep(5000);
+        mobileDriver.isElementPresent(getMobileLocator("Verification code is invalid"));
+
     }
+
+    @Given("I login with resource registered user")
+    public void iLoginWithResourceRegisteredUser() throws Exception {
+        Thread.sleep(3000);
+        login("onsightdemo@saksoft.com");
+        iClickOnButton("OK");
+    }
+}
 
 
 

@@ -66,6 +66,8 @@ public class EvaluationScreenHelperBDD {
         for (Map<String, String> map : dataLists) {
             String question = map.get("question");
             String answer = map.get("answer");
+            boolean textEnabled = map.get("textEnabled?").equalsIgnoreCase("YES")?true:false;
+
 
             String genericAnswerButton = locators.getMobileLocator("//locators/evaluation/genericAnswerButton");
             genericAnswerButton = genericAnswerButton.replace("{{question}}", question.trim());
@@ -84,7 +86,7 @@ public class EvaluationScreenHelperBDD {
                     mobileDriver.scrollScreenDown(1);
             }
             mobileDriver.clickOn(el);
-            if (mobileDriver.getMobileElement(explaination)!=null) {
+            if (textEnabled) {
                 WebElement elx = mobileDriver.getMobileElement(explaination);
                 mobileDriver.clickOn(elx);
                 mobileDriver.sendKeys(elx, "Automated Answer for " + question);
