@@ -248,7 +248,7 @@ Feature: 4_JobPhoto
     Then I verify "Install Freight" image count increase by "oldImageCount1"
     Then I verify "Show Ready" image count increase by "oldImageCount2"
 
-  @Regression @JobPhoto @Stage_mob @Android @MOBILE
+  @Regression @JobPhoto @Stage_mob @Android @MOBILE @Demo2
   Scenario: Verify to upload photo for two category
     And I navigate to job Updates screen
     And I enter "W-256523" job number

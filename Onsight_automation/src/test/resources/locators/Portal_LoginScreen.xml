@@ -31,6 +31,8 @@
         <editBtn>//button[text()='EDIT']</editBtn>
         <onToggleBtn>//tr[@role='row']/td[9]//input[@type='checkbox']</onToggleBtn>
         <selectReportFilterbtn>//button[@aria-label='Select']</selectReportFilterbtn>
+        <guestSecurityLevel>//button[text()='Guest']</guestSecurityLevel>
+        <ResourceSecurityLevel>//button[text()='Guest']</ResourceSecurityLevel>
 
     </portal>
 </locators>

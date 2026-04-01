@@ -209,6 +209,11 @@ Thread.sleep(5000);
             Thread.sleep(3000);
             webDriver.clickOn(getPortalLocator("imageNextClick"));
         }
+    }
+
+    @And("I navigate to securityLevel screen")
+    public void iNavigateToSecurityLevelScreen() throws Exception {
+        webDriver.clickOn(getPortalLocator("securityLevelsBtn"));
 
     }
 }
