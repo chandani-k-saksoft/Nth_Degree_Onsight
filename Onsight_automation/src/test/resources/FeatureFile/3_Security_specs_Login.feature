@@ -4,7 +4,7 @@ Feature: 7_Security Specs
     And I turn "ON" the wifi on the device
     And I made login mandatory
     And The user taps on the skip button on Marketing Page 1
-# comment test
+
   @Regression @Security_Specs @Stage_mob @Android @MOBILE @WEB @TestDemo
   Scenario Outline: Login with OTP and verify dashboard for different user roles
     Given I login to the application with valid user
