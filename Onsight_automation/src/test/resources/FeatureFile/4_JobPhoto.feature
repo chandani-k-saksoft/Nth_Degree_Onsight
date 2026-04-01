@@ -196,7 +196,7 @@ Feature: 4_JobPhoto
       | Close Date | 03/27/2026 8:00 AM |
       | Hall Clear | 04/10/2026 8:00 AM |
 
-  @Regression @JobPhoto @Stage_mob @Android @MOBILE @TestDemo
+  @Regression @JobPhoto @Stage_mob @Android @MOBILE
   Scenario: Verify to added job photo for multiple category with evaluation screen navigation
     And I navigate to job Updates screen
     And I enter "W-256523" job number
@@ -248,7 +248,7 @@ Feature: 4_JobPhoto
     Then I verify "Install Freight" image count increase by "oldImageCount1"
     Then I verify "Show Ready" image count increase by "oldImageCount2"
 
-  @Regression @JobPhoto @Stage_mob @Android @MOBILE @TestDemo3
+  @Regression @JobPhoto @Stage_mob @Android @MOBILE @TestDemo
   Scenario: Verify to upload photo for two category
     And I navigate to job Updates screen
     And I enter "W-256523" job number
