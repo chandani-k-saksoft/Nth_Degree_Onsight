@@ -211,6 +211,7 @@ public class JobPhotoScreenHelperBDD {
 
     @And("I get {string} add photo")
     public void iGetAddPhoto(String name) throws Exception {
+        //Test new test case
         for(int i=0;i<10;i++)
         {
             WebElement el = getMobileLocator("jobPhotoAddBtn", "{{NAME}}", name);
