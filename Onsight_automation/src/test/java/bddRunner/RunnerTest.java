@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
         features = {"src/test/resources/FeatureFile"}
         , glue = {"pageHelper"}
         , plugin = {"pretty", "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"}
-        , tags = "@TestDemo3"
+        , tags = "@TestDemo"
        , dryRun = false
 
 )
